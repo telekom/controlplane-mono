@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/telekom/controlplane-mono/compare/v0.2.2...v0.3.0) (2025-05-07)
+
+
+### Features
+
+* added alot more domains ([86f506e](https://github.com/telekom/controlplane-mono/commit/86f506e6b5f854aa1509fb9c3899707eaf5d8cb4))
+
 ## [0.2.2](https://github.com/telekom/controlplane-mono/compare/v0.2.1...v0.2.2) (2025-05-07)
 
 
