@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/telekom/controlplane-mono/compare/v0.3.1...v0.3.2) (2025-05-07)
+
+
+### Bug Fixes
+
+* **gateway:** correct api-group ([06ff9be](https://github.com/telekom/controlplane-mono/commit/06ff9bec2a2acc0148560877f583d9ee8f664658))
+
 ## [0.3.1](https://github.com/telekom/controlplane-mono/compare/v0.3.0...v0.3.1) (2025-05-07)
 
 
