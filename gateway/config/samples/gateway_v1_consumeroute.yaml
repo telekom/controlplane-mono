@@ -1,0 +1,15 @@
+apiVersion: gateway.cp.ei.telekom.de/v1
+kind: ConsumeRoute
+metadata:
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/managed-by: kustomize
+    gateway: gateway-sample
+    path: foo-v1
+    cp.ei.telekom.de/environment: default
+  name: consumeroute-sample
+spec:
+  route: 
+    name: route-sample
+    namespace: default
+  consumerName: sample-consumer-name

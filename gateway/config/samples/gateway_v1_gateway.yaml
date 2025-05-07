@@ -1,0 +1,20 @@
+apiVersion: gateway.cp.ei.telekom.de/v1
+kind: Gateway
+metadata:
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/managed-by: kustomize
+    cp.ei.telekom.de/environment: default
+  name: gateway-sample
+spec:
+  admin:
+    url: http://localhost:8001
+    clientId: rover
+    clientSecret: XJyMENQI7HbZheaH0p7AALEyeKqGiesX
+    issuerUrl: https://iris-distcp1-dataplane1.dev.dhei.telekom.de/auth/realms/rover
+  redis:
+    host: http://localhost
+    port: 12345
+    password: iNeedCoffee
+  issuerUrl: https://this.is.a.gateway.regular.issuer/auth/realms/rover
+  url: https://stargate-somewhere.telekom.com

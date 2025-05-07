@@ -1,0 +1,9 @@
+apiVersion: gateway.cp.ei.telekom.de/v1
+kind: Realm
+metadata:
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/managed-by: kustomize
+  name: realm-sample
+spec:
+  # TODO(user): Add fields here

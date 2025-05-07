@@ -1,0 +1,51 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - gateway.github.com/telekom
+  resources:
+  - consumeroutes
+  - consumers
+  - gateways
+  - realms
+  - routes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gateway.github.com/telekom
+  resources:
+  - consumeroutes/finalizers
+  - consumers/finalizers
+  - gateways/finalizers
+  - realms/finalizers
+  - routes/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - gateway.github.com/telekom
+  resources:
+  - consumeroutes/status
+  - consumers/status
+  - gateways/status
+  - realms/status
+  - routes/status
+  verbs:
+  - get
+  - patch
+  - update
