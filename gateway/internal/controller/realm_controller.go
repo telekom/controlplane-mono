@@ -45,9 +45,9 @@ type RealmReconciler struct {
 	cc.Controller[*gatewayv1.Realm]
 }
 
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=realms,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=realms/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=realms/finalizers,verbs=update
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=realms,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=realms/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=realms/finalizers,verbs=update
 
 func (r *RealmReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	return r.Controller.Reconcile(ctx, req, &gatewayv1.Realm{})
