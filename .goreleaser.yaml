@@ -147,7 +147,7 @@ kos:
     base_image: gcr.io/distroless/static:nonroot
     user: 65532:65532
     repositories:
-      - ghcr.io/telekom/controlplane-mono/gateway
+      - ghcr.io/telekom/controlplane-mono/secret-manager
     labels:
       org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/secret-manager
       org.opencontainers.image.version: "{{.Version}}"
@@ -168,7 +168,7 @@ kos:
     base_image: gcr.io/distroless/static:nonroot
     user: 65532:65532
     repositories:
-      - ghcr.io/telekom/controlplane-mono/gateway
+      - ghcr.io/telekom/controlplane-mono/common-server
     labels:
       org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/common-server
       org.opencontainers.image.version: "{{.Version}}"
