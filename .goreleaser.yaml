@@ -24,6 +24,9 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - formats: [tar.gz]
@@ -80,4 +83,6 @@ kos:
       - "{{.Tag}}"
       - "{{if not .Prerelease}}stable{{end}}"
     bare: true
-
+    platforms:
+      - linux/amd64
+      - linux/arm64
