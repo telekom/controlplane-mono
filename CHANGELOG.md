@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/telekom/controlplane-mono/compare/v0.3.0...v0.3.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* **ci:** correct name for images ([d0fb84d](https://github.com/telekom/controlplane-mono/commit/d0fb84d72d0c838457a1d955e6fe0d3e11a3dadd))
+
 # [0.3.0](https://github.com/telekom/controlplane-mono/compare/v0.2.2...v0.3.0) (2025-05-07)
 
 
