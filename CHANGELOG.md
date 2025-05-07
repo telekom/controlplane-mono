@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/telekom/controlplane-mono/compare/v0.2.1...v0.2.2) (2025-05-07)
+
+
+### Bug Fixes
+
+* **ci:** changed archs ([579208e](https://github.com/telekom/controlplane-mono/commit/579208e4e638d95a98766452714f0beb8029b983))
+
 ## [0.2.1](https://github.com/telekom/controlplane-mono/compare/v0.2.0...v0.2.1) (2025-05-07)
 
 
