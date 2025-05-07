@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/telekom/controlplane-mono/compare/v0.2.0...v0.2.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* **ci:** disabled generate for now ([0dd2a41](https://github.com/telekom/controlplane-mono/commit/0dd2a416cb83e80dafd0521a5e814f17e36ee161))
+
 # [0.2.0](https://github.com/telekom/controlplane-mono/compare/v0.1.0...v0.2.0) (2025-05-07)
 
 
