@@ -39,9 +39,9 @@ type GatewayReconciler struct {
 }
 
 // +kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=gateways,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=gateways/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=gateways/finalizers,verbs=update
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=gateways,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=gateways/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=gateways/finalizers,verbs=update
 
 func (r *GatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	return r.Controller.Reconcile(ctx, req, &v1.Gateway{})

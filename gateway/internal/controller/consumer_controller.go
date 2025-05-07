@@ -47,9 +47,9 @@ type ConsumerReconciler struct {
 }
 
 // +kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumers,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumers/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumers/finalizers,verbs=update
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumers,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumers/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumers/finalizers,verbs=update
 
 func (r *ConsumerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	return r.Controller.Reconcile(ctx, req, &gatewayv1.Consumer{})

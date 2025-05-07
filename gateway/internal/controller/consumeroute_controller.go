@@ -44,9 +44,9 @@ type ConsumeRouteReconciler struct {
 }
 
 // +kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumeroutes,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumeroutes/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=gateway.github.com/telekom,resources=consumeroutes/finalizers,verbs=update
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumeroutes,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumeroutes/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=gateway.cp.ei.telekom.de,resources=consumeroutes/finalizers,verbs=update
 
 func (r *ConsumeRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	return r.Controller.Reconcile(ctx, req, &gatewayv1.ConsumeRoute{})

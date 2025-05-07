@@ -12,7 +12,7 @@ rules:
   - create
   - patch
 - apiGroups:
-  - gateway.github.com/telekom
+  - gateway.cp.ei.telekom.de
   resources:
   - consumeroutes
   - consumers
@@ -28,7 +28,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - gateway.github.com/telekom
+  - gateway.cp.ei.telekom.de
   resources:
   - consumeroutes/finalizers
   - consumers/finalizers
@@ -38,7 +38,7 @@ rules:
   verbs:
   - update
 - apiGroups:
-  - gateway.github.com/telekom
+  - gateway.cp.ei.telekom.de
   resources:
   - consumeroutes/status
   - consumers/status
