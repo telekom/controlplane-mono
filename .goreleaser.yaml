@@ -27,6 +27,39 @@ builds:
     goarch:
       - amd64
       - arm64
+  - id: identity
+    dir: identity
+    main: cmd/main.go
+    binary: identity-manager
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+  - id: secret-manager
+    dir: secret-manager
+    main: cmd/server/server.go
+    binary: secret-manager
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+  - id: common-server
+    dir: common-server
+    main: cmd/server/server.go
+    binary: common-server
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - formats: [tar.gz]
@@ -75,6 +108,69 @@ kos:
       - ghcr.io/telekom/controlplane-mono/gateway
     labels:
       org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/gateway
+      org.opencontainers.image.version: "{{.Version}}"
+      org.opencontainers.image.description: |
+        This is a test description
+    tags:
+      - latest
+      - "{{.Tag}}"
+      - "{{if not .Prerelease}}stable{{end}}"
+    bare: true
+    platforms:
+      - linux/amd64
+      - linux/arm64
+  - id: identity
+    build: identity
+    main: .
+    working_dir: identity/cmd
+    base_image: gcr.io/distroless/static:nonroot
+    user: 65532:65532
+    repositories:
+      - ghcr.io/telekom/controlplane-mono/identity
+    labels:
+      org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/identity
+      org.opencontainers.image.version: "{{.Version}}"
+      org.opencontainers.image.description: |
+        This is a test description
+    tags:
+      - latest
+      - "{{.Tag}}"
+      - "{{if not .Prerelease}}stable{{end}}"
+    bare: true
+    platforms:
+      - linux/amd64
+      - linux/arm64
+  - id: secret-manager
+    build: secret-manager
+    main: .
+    working_dir: secret-manager/cmd/server
+    base_image: gcr.io/distroless/static:nonroot
+    user: 65532:65532
+    repositories:
+      - ghcr.io/telekom/controlplane-mono/gateway
+    labels:
+      org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/secret-manager
+      org.opencontainers.image.version: "{{.Version}}"
+      org.opencontainers.image.description: |
+        This is a test description
+    tags:
+      - latest
+      - "{{.Tag}}"
+      - "{{if not .Prerelease}}stable{{end}}"
+    bare: true
+    platforms:
+      - linux/amd64
+      - linux/arm64
+  - id: common-server
+    build: common-server
+    main: .
+    working_dir: common-server/cmd/server
+    base_image: gcr.io/distroless/static:nonroot
+    user: 65532:65532
+    repositories:
+      - ghcr.io/telekom/controlplane-mono/gateway
+    labels:
+      org.opencontainers.image.source: https://github.com/telekom/controlplane-mono/common-server
       org.opencontainers.image.version: "{{.Version}}"
       org.opencontainers.image.description: |
         This is a test description

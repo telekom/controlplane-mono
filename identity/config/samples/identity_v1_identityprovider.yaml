@@ -1,0 +1,15 @@
+apiVersion: identity.cp.ei.telekom.de/v1
+kind: IdentityProvider
+metadata:
+  labels:
+    app.kubernetes.io/name: idp-germany
+    app.kubernetes.io/managed-by: kustomize
+    cp.ei.telekom.de/zone: dataplane1
+    cp.ei.telekom.de/environment: poc
+  name: idp-germany
+  namespace: default
+spec:
+  adminUrl: "https://iris-distcp1-dataplane1.dev.dhei.telekom.de/auth/admin/realms/"
+  adminClientId: "admin-cli"
+  adminUserName: "admin"
+  adminPassword: "password"

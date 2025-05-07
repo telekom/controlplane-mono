@@ -1,0 +1,16 @@
+apiVersion: identity.cp.ei.telekom.de/v1
+kind: Client
+metadata:
+  labels:
+    app.kubernetes.io/name: client-spain
+    app.kubernetes.io/managed-by: kustomize
+    cp.ei.telekom.de/zone: dataplane1
+    cp.ei.telekom.de/environment: poc
+  name: client-germany
+  namespace: default
+spec:
+  realm:
+    name: realm-germany
+    namespace: default
+  clientId: "client-spain"
+  clientSecret: "He3nkDCqfhV63v6A0Fb1L8Vq5"

@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  name: {{ include "app.serviceAccountName" . }}-role
+rules: 
+  {{ .Values.rbac.rules | toYaml | nindent 2 }}

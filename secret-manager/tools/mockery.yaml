@@ -1,0 +1,25 @@
+with-expecter: True
+mockname: "Mock{{.InterfaceName}}"
+dir: "../test/mocks"
+outpkg: "mocks"
+filename: "mock_{{.InterfaceName}}.go"
+packages:
+  cp.ei.telekom.de/secret-manager/pkg/backend:
+    config:
+    interfaces:
+      Onboarder:
+        config:
+      Backend:
+        config:
+      SecretId:
+        config:
+  cp.ei.telekom.de/secret-manager/pkg/backend/conjur:
+    config:
+    interfaces:
+      ConjurAPI:
+        config:
+  cp.ei.telekom.de/secret-manager/pkg/backend/encrypt:
+    config:
+    interfaces:
+      Encrypter:
+        config:

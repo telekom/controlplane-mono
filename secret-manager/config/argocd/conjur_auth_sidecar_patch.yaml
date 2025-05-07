@@ -1,0 +1,46 @@
+- op: add
+  path: /spec/template/spec/containers/1
+  value:
+    name: authenticator
+    image: cyberark/conjur-authn-k8s-client:latest
+    imagePullPolicy: Always
+    envFrom:
+    - configMapRef:
+        name: conjur-authn-k8s-client
+    volumeMounts:
+    - name: jwt-token
+      mountPath: /var/run/secrets/tokens
+      readOnly: true
+    - name: conjur-access-token
+      mountPath: /run/conjur
+      readOnly: false
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: jwt-token
+    projected:
+      sources:
+      - serviceAccountToken:
+          path: jwt
+          expirationSeconds: 600
+          audience: https://vault.telekom.de
+
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: conjur-access-token
+    mountPath: /run/conjur
+    readOnly: true
+
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    configMapRef:
+      name: conjur-authn-k8s-client
+
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: conjur-access-token
+    emptyDir:
+      medium: Memory

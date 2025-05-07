@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-traffic
+  namespace: system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: secret-manager
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            cp.ei.telekom.de/secret-manager: enabled  # Only from namespaces with this label 
+      ports:
+        - port: 8443
+          protocol: TCP

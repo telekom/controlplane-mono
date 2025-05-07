@@ -1,0 +1,6 @@
+## Append samples of your project ##
+resources:
+- identity_v1_identityprovider.yaml
+- identity_v1_client.yaml
+- identity_v1_realm.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

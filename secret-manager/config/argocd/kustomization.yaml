@@ -1,0 +1,45 @@
+kind: Component
+
+images:
+# - name: placeholder
+#   newName: mtr.devops.telekom.de/tardis-internal/hyperion/secret-manager
+#   newTag: snapshot-main
+- name: authn-k8s-client
+  newName: cyberark/conjur-authn-k8s-client
+  newTag: latest
+
+patches:
+- path: conjur_auth_sidecar_patch.yaml
+  target:
+    kind: Deployment
+    name: secret-manager
+- target:
+    kind: Deployment
+    name: secret-manager
+  patch: |-
+    - op: add
+      path: /spec/template/spec/imagePullSecrets
+      value: 
+        - name: eni-pull-mtr-devops-tardis-internal-secret
+    - op: replace
+      path: "/spec/template/spec/containers/0/imagePullPolicy"
+      value: "Always"
+
+
+configMapGenerator:
+- name: conjur-authn-k8s-client
+  options:
+    disableNameSuffixHash: true
+  literals:
+    - CONJUR_ACCOUNT=dtag
+    - CONJUR_APPLIANCE_URL=https://secrets-manager.telekom.de
+    - CONJUR_FOLLOWER_URL=https://vault.telekom.de/ 
+    - CONJUR_AUTHENTICATOR_ID=20575-awsd-dev-distcp1
+    - CONJUR_AUTHN_URL=https://vault.telekom.de/authn-jwt/20575-awsd-dev-distcp1 
+    - CONJUR_AUTHN_LOGIN=host/spm/v1/20575/tardis_dta_trit/integration-secrets-manager
+    - CONJUR_ROOT_POLICY_PATH=spm/v1/20575/tardis_dta_trit/integration
+    - JWT_TOKEN_PATH=/var/run/secrets/tokens/jwt
+    - CONJUR_AUTHN_TOKEN_FILE=/run/conjur/access-token
+    - LOG_LEVEL=info
+  files:
+    - CONJUR_SSL_CERTIFICATE=conjur-ssl-certificate.crt

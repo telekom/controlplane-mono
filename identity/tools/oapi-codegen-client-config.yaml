@@ -1,0 +1,8 @@
+package: api
+generate:
+  fiber-server: false
+  strict-server: false
+  models: false
+  client: true
+  embedded-spec: false
+output: ../pkg/api/client.gen.go

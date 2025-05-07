@@ -1,0 +1,13 @@
+# This is only needed when using the cert-manager to issue certificates.
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: cert-volume
+    secret:
+      secretName: secret-manager-cert
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: cert-volume
+    mountPath: /etc/tls
+    readOnly: true

@@ -1,0 +1,22 @@
+address: ":8080"
+basepath: "/api"
+addGroupToPath: true
+resources:
+  - id: rovers
+    group: tcp.ei.telekom.de
+    version: v1
+    resource: rovers
+    allowedSorts:
+      - metadata.creationTimestamp
+openapi:
+  title: "Rovers API"
+  version: "v1"
+  description: "Rovers API"
+  servers:
+    - url: "http://localhost:8080"
+      description: "Local Development"
+
+security:
+  enabled: true
+  defaultScope: "tardis:admin:read"
+  scopePrefix: "tardis:"

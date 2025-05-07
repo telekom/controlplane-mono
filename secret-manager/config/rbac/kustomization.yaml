@@ -1,0 +1,6 @@
+resources:
+- service_account.yaml
+# The following resource are only needed when using the Kubernetes backend
+- secret_reader.yaml
+- secret_writer.yaml
+- clusterrole_binding.yaml

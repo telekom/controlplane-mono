@@ -1,0 +1,8 @@
+resources:
+- monitor.yaml
+
+# Only needed if cert-manager is used to manage TLS certificates
+# patches:
+#   - path: monitor_tls_patch.yaml
+#     target:
+#       kind: ServiceMonitor

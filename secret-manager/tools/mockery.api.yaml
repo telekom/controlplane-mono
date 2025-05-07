@@ -1,0 +1,11 @@
+with-expecter: True
+mockname: "Mock{{.InterfaceName}}"
+dir: "../api/fake"
+outpkg: "fake"
+filename: "mock_{{.InterfaceName}}.go"
+packages:
+  cp.ei.telekom.de/secret-manager/api:
+    config:
+    interfaces:
+      SecretManager:
+        config:
