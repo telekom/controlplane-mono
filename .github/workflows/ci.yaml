@@ -21,8 +21,8 @@ jobs:
       - name: Build Matrix
         id: text
         run: |
-          echo "subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
-          echo "operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
+          echo "subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
   test:
     name: Run unit tests
