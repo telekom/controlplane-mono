@@ -9,13 +9,32 @@ on:
       - ci/*
 
 jobs:
+
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      subprojects: ${{ steps.subprojects.outputs.subprojects }}
+      operators: ${{ steps.operators.outputs.operators }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Determine subprojects
+        id: subprojects
+        run: |
+          echo "subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
+      - name: Determine operators
+        id: operators
+        run: |
+          echo "operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
+
   test:
     name: Run unit tests
     runs-on: ubuntu-latest
+    needs: prepare
     strategy:
       fail-fast: false # run all tests even if one fails
       matrix:
-        subproject: ${{ steps.subprojects.outputs.subprojects }}
+        subproject: ${{ needs.prepare.outputs.subprojects }}
     permissions:
       pull-requests: write
       checks: write
@@ -47,11 +66,11 @@ jobs:
   build-operators:
     name: Build operators
     runs-on: ubuntu-latest
-    needs: [ test ]
+    needs: [prepare, test]
     strategy:
       fail-fast: false
       matrix:
-        operator: ${{ steps.operators.outputs.operators }}
+        operator: ${{ needs.prepare.outputs.operators }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
