@@ -1,21 +1,22 @@
-name: Go Test
+name: Build Container Images
 
 # todo: add more rules
 on:      
   push:
+    branches:
+      - feat/*
+      - fix/*
+
 
 jobs:
-  test:
-    name: Run unit tests
+  build-operators:
+    name: Build operators
     runs-on: ubuntu-latest
+    needs: [ test ]
     strategy:
       fail-fast: false # run all tests even if one fails
       matrix:
-        subproject: ["common", "common-server", "secret-manager", "gateway", "identity"]
-    permissions:
-      pull-requests: write
-      checks: write
-      contents: read
+        subproject: ["gateway", "identity"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,12 +31,9 @@ jobs:
             ~/.go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
-      # - name: Setup envtest
-      #   run: make setup-envtest
-      #   working-directory: ${{ matrix.subproject }}
-
-      - name: Run tests
-        run: make test
-        working-directory: ${{ matrix.subproject }}
+      - uses: ko-build/setup-ko@v0.8
+      - name: Inject slug vars
+        uses: rlespinasse/github-slug-action@v5
+      - run: ko build ${{ matrix.subproject }}/cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
         env:
-          ENVTEST_K8S_VERSION: "1.31.0"
+          KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
