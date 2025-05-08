@@ -13,18 +13,15 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      subprojects: ${{ steps.subprojects.outputs.subprojects }}
-      operators: ${{ steps.operators.outputs.operators }}
+      subprojects: ${{ steps.text.outputs.subprojects }}
+      operators: ${{ steps.text.outputs.operators }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Determine subprojects
-        id: subprojects
+      - name: Build Matrix
+        id: text
         run: |
           echo "subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
-      - name: Determine operators
-        id: operators
-        run: |
           echo "operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
 
   test:
@@ -42,10 +39,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Determine subprojects
-        id: subprojects
-        run: |
-          echo "subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -74,10 +67,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Determine operators
-        id: operators
-        run: |
-          echo "operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | tr '\n' ' ')" >> $GITHUB_ENV
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
