@@ -1,0 +1,54 @@
+name: go-build-test
+on:
+  push:
+    branches:
+      - "main"
+      - "feature-**"
+      - "release-**"
+  pull_request:
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: Build and test Go Components
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # run all tests even if one fails
+      matrix:
+        subproject: ["common", "common-server", "secret-manager", "gateway", "identity"]
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+
+      - name: Set up Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
+        with:
+          go-version-file: go.mod
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/.go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+
+      - name: Set up gotestfmt
+        uses: gotesttools/gotestfmt-action@v2
+
+      - name: Build and test subproject
+        run: make test
+        working-directory: ${{ matrix.subproject }}
+        env:
+          ENVTEST_K8S_VERSION: "1.31.0"
+
+      - name: Upload test log
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pin@v4.6.2
+        if: always()
+        with:
+          name: test-log
+          path: /tmp/gotest.log
+          if-no-files-found: error
