@@ -4,7 +4,9 @@ on:
     branches:
       - "main"
       - "feature-**"
+      - "feat-**"
       - "release-**"
+      - "dependabot-**"
   pull_request:
     branches:
       - "main"
