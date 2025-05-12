@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build-test:
-    name: Build and test Go Components
+    name: build-test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false # run all tests even if one fails
