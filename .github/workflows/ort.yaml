@@ -1,6 +1,7 @@
 name: ORT scanning
 
 on:
+  push:
   pull_request:
 
 
