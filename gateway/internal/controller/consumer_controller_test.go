@@ -83,12 +83,12 @@ var _ = Describe("Consumer Controller", Ordered, func() {
 	Context("When creating a Consumer", func() {
 
 		It("should successfully provision the Consumer", func() {
+			By("Setting up the mocks")
+			GetMockClientFor(gateway).EXPECT().CreateOrReplaceConsumer(gomock.Any(), consumer.Name).Return(nil).MinTimes(1)
+
 			By("Creating the Consumer")
 			err := k8sClient.Create(ctx, consumer)
 			Expect(err).NotTo(HaveOccurred())
-
-			By("Setting up the mocks")
-			GetMockClientFor(gateway).EXPECT().CreateOrReplaceConsumer(gomock.Any(), consumer.Name).Return(nil).MinTimes(1)
 
 			By("Checking the status")
 			Eventually(func(g Gomega) {
@@ -113,12 +113,12 @@ var _ = Describe("Consumer Controller", Ordered, func() {
 		})
 
 		It("should delete the Consumer", func() {
+			By("Setting up the mocks")
+			GetMockClientFor(gateway).EXPECT().DeleteConsumer(gomock.Any(), consumer.Spec.Name).Return(nil).MinTimes(1)
+
 			By("Deleting the Consumer")
 			err := k8sClient.Delete(ctx, consumer)
 			Expect(err).NotTo(HaveOccurred())
-
-			By("Setting up the mocks")
-			GetMockClientFor(gateway).EXPECT().DeleteConsumer(gomock.Any(), consumer.Spec.Name).Return(nil).MinTimes(1)
 
 			By("Checking the status")
 			Eventually(func(g Gomega) {
