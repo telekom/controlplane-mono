@@ -3,10 +3,6 @@ name: Go CI
 # todo: add more rules
 on:      
   push:
-    branches:
-      - feat/*
-      - fix/*
-      - ci/*
 
 jobs:
 
