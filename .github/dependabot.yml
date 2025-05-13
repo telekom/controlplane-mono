@@ -16,3 +16,8 @@ updates:
       - identity
       - gateway
       - secret-manager
+    groups:
+      default: 
+        update-types:
+          - patch
+          - minor
