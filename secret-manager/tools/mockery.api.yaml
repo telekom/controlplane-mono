@@ -1,10 +1,10 @@
 with-expecter: True
 mockname: "Mock{{.InterfaceName}}"
-dir: "../api/fake"
+dir: "../pkg/api/fake"
 outpkg: "fake"
 filename: "mock_{{.InterfaceName}}.go"
 packages:
-  cp.ei.telekom.de/secret-manager/api:
+  github.com/telekom/controlplane-mono/secret-manager/pkg/api:
     config:
     interfaces:
       SecretManager:

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/telekom/controlplane-mono/secret-manager/api/util"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/util"
 )
 
 var (

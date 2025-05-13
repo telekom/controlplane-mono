@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/telekom/controlplane-mono/secret-manager/api"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 	"github.com/telekom/controlplane-mono/secret-manager/pkg/backend"
 )
 

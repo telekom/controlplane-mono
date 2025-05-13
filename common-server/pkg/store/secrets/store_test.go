@@ -9,7 +9,7 @@ import (
 	"github.com/telekom/controlplane-mono/common-server/pkg/store"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store/secrets"
 	"github.com/telekom/controlplane-mono/common-server/test/mocks"
-	"github.com/telekom/controlplane-mono/secret-manager/api/fake"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/fake"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 

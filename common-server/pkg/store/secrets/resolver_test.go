@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store/secrets"
-	"github.com/telekom/controlplane-mono/secret-manager/api"
-	"github.com/telekom/controlplane-mono/secret-manager/api/fake"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/fake"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 

@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
+	"github.com/rs/zerolog"
 	"github.com/telekom/controlplane-mono/common-server/internal/config"
 	"github.com/telekom/controlplane-mono/common-server/internal/crd"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server"
@@ -29,6 +30,8 @@ func init() {
 
 func main() {
 	flag.Parse()
+
+	zerolog.Arr()
 
 	logCfg := zap.NewProductionConfig()
 	logCfg.DisableCaller = true

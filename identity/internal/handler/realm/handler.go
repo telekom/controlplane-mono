@@ -13,7 +13,7 @@ import (
 	"github.com/telekom/controlplane-mono/identity/internal/handler/identityprovider"
 	"github.com/telekom/controlplane-mono/identity/pkg/keycloak"
 
-	secrets "github.com/telekom/controlplane-mono/secret-manager/api"
+	secrets "github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
