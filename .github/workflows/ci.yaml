@@ -9,15 +9,15 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      subprojects: ${{ steps.text.outputs.subprojects }}
-      operators: ${{ steps.text.outputs.operators }}
+      subprojects: ${{ steps.matrix.outputs.subprojects }}
+      operators: ${{ steps.matrix.outputs.operators }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v5
       - name: Build Matrix
-        id: text
+        id: matrix
         run: |
           subprojects=$(find . -maxdepth 3 -type f -name Makefile | cut -f2 -d/ | jq -R -s -c 'split("\n") | map(select(length > 0))')
           operators=$(find . -maxdepth 3 -type f -name main.go | cut -f2 -d/ | jq -R -s -c 'split("\n") | map(select(length > 0))')
