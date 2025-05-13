@@ -74,14 +74,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operator: ${{ fromJson(needs.prepare.outputs.operators) }}
+        subproject: ${{ fromJson(needs.prepare.outputs.operators) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: ${{ matrix.operator }}/go.mod
+          go-version-file: ${{ matrix.subproject }}/go.mod
       - uses: actions/cache@v4
         with:
           path: |
@@ -92,9 +92,10 @@ jobs:
       - uses: ko-build/setup-ko@v0.8
       - name: Inject slug vars
         uses: rlespinasse/github-slug-action@v5
-      - run: ko build ${{ matrix.operator }}/cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
+      - run: ko build ${{ matrix.subproject }}/cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
         env:
-          KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.operator }}
+          KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
+        working-directory: ${{ matrix.subproject }}
 
 
 # TODO: build other subprojects
