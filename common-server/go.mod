@@ -2,6 +2,8 @@ module github.com/telekom/controlplane-mono/common-server
 
 go 1.24.2
 
+require github.com/telekom/controlplane-mono/secret-manager v0.0.0
+
 require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/dgraph-io/badger/v4 v4.7.0
@@ -29,9 +31,12 @@ require (
 	sigs.k8s.io/controller-runtime v0.20.4
 )
 
+replace github.com/telekom/controlplane-mono/secret-manager => ../secret-manager
+
 require (
 	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -63,6 +68,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/oapi-codegen/runtime v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect

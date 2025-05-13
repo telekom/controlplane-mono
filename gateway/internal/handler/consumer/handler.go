@@ -11,6 +11,7 @@ import (
 	"github.com/telekom/controlplane-mono/gateway/internal/handler/gateway"
 	"github.com/telekom/controlplane-mono/gateway/internal/handler/realm"
 	"github.com/telekom/controlplane-mono/gateway/pkg/kongutil"
+	secrets "github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 )
 
 var _ handler.Handler[*v1.Consumer] = &ConsumerHandler{}
@@ -42,10 +43,10 @@ func (h *ConsumerHandler) CreateOrUpdate(ctx context.Context, consumer *v1.Consu
 		return nil
 	}
 
-	// gateway.Spec.Admin.ClientSecret, err = secrets.Get(ctx, gateway.Spec.Admin.ClientSecret)
-	// if err != nil {
-	// 	return errors.Wrap(err, "failed to get gateway client secret")
-	// }
+	gateway.Spec.Admin.ClientSecret, err = secrets.Get(ctx, gateway.Spec.Admin.ClientSecret)
+	if err != nil {
+		return errors.Wrap(err, "failed to get gateway client secret")
+	}
 
 	kc, err := kongutil.GetClientFor(gateway)
 	if err != nil {

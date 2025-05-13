@@ -3,6 +3,12 @@ module github.com/telekom/controlplane-mono/gateway
 go 1.24.2
 
 require (
+	github.com/telekom/controlplane-mono/common v0.0.0
+	github.com/telekom/controlplane-mono/common-server v0.0.0 // indirect
+	github.com/telekom/controlplane-mono/secret-manager v0.0.0
+)
+
+require (
 	github.com/emirpasic/gods v1.18.1
 	github.com/go-logr/logr v1.4.2
 	github.com/google/uuid v1.6.0
@@ -18,6 +24,12 @@ require (
 	k8s.io/client-go v0.33.0
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738
 	sigs.k8s.io/controller-runtime v0.20.4
+)
+
+replace (
+	github.com/telekom/controlplane-mono/common => ../common
+	github.com/telekom/controlplane-mono/common-server => ../common-server
+	github.com/telekom/controlplane-mono/secret-manager => ../secret-manager
 )
 
 require (
@@ -44,6 +56,7 @@ require (
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/cel-go v0.22.0 // indirect
 	github.com/google/gnostic-models v0.6.9 // indirect

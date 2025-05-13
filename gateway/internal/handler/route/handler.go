@@ -15,6 +15,7 @@ import (
 	"github.com/telekom/controlplane-mono/gateway/internal/handler/gateway"
 	"github.com/telekom/controlplane-mono/gateway/internal/handler/realm"
 	"github.com/telekom/controlplane-mono/gateway/pkg/kongutil"
+	secrets "github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )
@@ -139,14 +140,14 @@ func NewFeatureBuilder(ctx context.Context, route *gatewayv1.Route) (features.Fe
 		return nil, nil
 	}
 
-	// gateway.Spec.Admin.ClientSecret, err = secrets.Get(ctx, gateway.Spec.Admin.ClientSecret)
-	// if err != nil {
-	// 	return nil, errors.Wrap(err, "failed to get gateway client secret")
-	// }
-	// gateway.Spec.Redis.Password, err = secrets.Get(ctx, gateway.Spec.Redis.Password)
-	// if err != nil {
-	// 	return nil, errors.Wrap(err, "failed to get gateway redis password")
-	// }
+	gateway.Spec.Admin.ClientSecret, err = secrets.Get(ctx, gateway.Spec.Admin.ClientSecret)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get gateway client secret")
+	}
+	gateway.Spec.Redis.Password, err = secrets.Get(ctx, gateway.Spec.Redis.Password)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get gateway redis password")
+	}
 
 	kc, err := kongutil.GetClientFor(gateway)
 	if err != nil {
