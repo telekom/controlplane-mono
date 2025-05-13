@@ -50,12 +50,22 @@ jobs:
             ~/.go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
-      - name: Run tests
+      - name: Set up gotestfmt
+        uses: gotesttools/gotestfmt-action@v2
+
+      - name: Build and test subproject
         run: make test
         working-directory: ${{ matrix.subproject }}
-
         env:
           ENVTEST_K8S_VERSION: "1.31.0"
+
+      - name: Upload test log
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pin@v4.6.2
+        if: always()
+        with:
+          name: test-log-${{ matrix.subproject }}
+          path: /tmp/gotest.log
+          if-no-files-found: error
           
   build-operators:
     name: Build operators
