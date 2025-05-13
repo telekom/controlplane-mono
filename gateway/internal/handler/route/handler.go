@@ -3,6 +3,7 @@ package route
 import (
 	"context"
 
+	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	cc "github.com/telekom/controlplane-mono/common/pkg/client"
 	"github.com/telekom/controlplane-mono/common/pkg/condition"
@@ -85,12 +86,13 @@ func (h *RouteHandler) CreateOrUpdate(ctx context.Context, route *gatewayv1.Rout
 }
 
 func (h *RouteHandler) Delete(ctx context.Context, route *gatewayv1.Route) error {
-
+	log := logr.FromContextOrDiscard(ctx)
 	found, realm, err := realm.GetRealmByRef(ctx, route.Spec.Realm)
 	if err != nil {
 		return err
 	}
 	if !found {
+		log.Info("Realm not found, skipping route deletion")
 		return nil
 	}
 
@@ -99,6 +101,7 @@ func (h *RouteHandler) Delete(ctx context.Context, route *gatewayv1.Route) error
 		return err
 	}
 	if !found {
+		log.Info("Gateway not found, skipping route deletion")
 		return nil
 	}
 

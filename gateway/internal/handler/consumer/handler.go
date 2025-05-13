@@ -3,6 +3,7 @@ package consumer
 import (
 	"context"
 
+	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	"github.com/telekom/controlplane-mono/common/pkg/condition"
 	"github.com/telekom/controlplane-mono/common/pkg/handler"
@@ -63,14 +64,23 @@ func (h *ConsumerHandler) CreateOrUpdate(ctx context.Context, consumer *v1.Consu
 }
 
 func (h *ConsumerHandler) Delete(ctx context.Context, consumer *v1.Consumer) error {
-	_, realm, err := realm.GetRealmByRef(ctx, consumer.Spec.Realm)
+	log := logr.FromContextOrDiscard(ctx)
+	found, realm, err := realm.GetRealmByRef(ctx, consumer.Spec.Realm)
 	if err != nil {
 		return err
 	}
+	if !found {
+		log.Info("Realm not found, skipping consumer deletion")
+		return nil
+	}
 
-	_, gateway, err := gateway.GetGatewayByRef(ctx, *realm.Spec.Gateway)
+	found, gateway, err := gateway.GetGatewayByRef(ctx, *realm.Spec.Gateway)
 	if err != nil {
 		return err
+	}
+	if !found {
+		log.Info("Gateway not found, skipping consumer deletion")
+		return nil
 	}
 
 	kc, err := kongutil.GetClientFor(gateway)
