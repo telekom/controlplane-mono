@@ -86,14 +86,20 @@ func (h *RouteHandler) CreateOrUpdate(ctx context.Context, route *gatewayv1.Rout
 
 func (h *RouteHandler) Delete(ctx context.Context, route *gatewayv1.Route) error {
 
-	_, realm, err := realm.GetRealmByRef(ctx, route.Spec.Realm)
+	found, realm, err := realm.GetRealmByRef(ctx, route.Spec.Realm)
 	if err != nil {
 		return err
 	}
+	if !found {
+		return nil
+	}
 
-	_, gateway, err := gateway.GetGatewayByRef(ctx, *realm.Spec.Gateway)
+	found, gateway, err := gateway.GetGatewayByRef(ctx, *realm.Spec.Gateway)
 	if err != nil {
 		return err
+	}
+	if !found {
+		return nil
 	}
 
 	kc, err := kongutil.GetClientFor(gateway)

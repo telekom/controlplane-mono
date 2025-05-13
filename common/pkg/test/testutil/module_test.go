@@ -14,7 +14,7 @@ var _ = Describe("Module", func() {
 		It("should find the go.mod file", func() {
 			path, err := findNextFileMatch("go.mod")
 			Expect(err).To(BeNil())
-			Expect(path).To(Equal("../../../../go.mod"))
+			Expect(path).To(Equal("../../../go.mod"))
 
 			_, err = os.Stat(path)
 			Expect(err).To(BeNil())
