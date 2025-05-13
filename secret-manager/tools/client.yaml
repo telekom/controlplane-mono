@@ -5,6 +5,6 @@ generate:
   models: true
   client: true
   embedded-spec: false
-output: ../api/gen/client.gen.go
+output: ../pkg/api/gen/client.gen.go
 additional-imports:
   - package: ""

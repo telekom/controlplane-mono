@@ -40,7 +40,7 @@ import (
 
 	identityv1 "github.com/telekom/controlplane-mono/identity/api/v1"
 	"github.com/telekom/controlplane-mono/identity/internal/controller"
-	secretmetrics "github.com/telekom/controlplane-mono/secret-manager/api/metrics"
+	secretmetrics "github.com/telekom/controlplane-mono/secret-manager/pkg/api/metrics"
 	// +kubebuilder:scaffold:imports
 )
 

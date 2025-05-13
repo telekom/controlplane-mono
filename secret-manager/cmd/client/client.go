@@ -7,8 +7,8 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
-	"github.com/telekom/controlplane-mono/secret-manager/api"
-	"github.com/telekom/controlplane-mono/secret-manager/api/gen"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/gen"
 	"go.uber.org/zap"
 )
 

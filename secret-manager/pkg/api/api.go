@@ -9,9 +9,9 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/telekom/controlplane-mono/secret-manager/api/accesstoken"
-	"github.com/telekom/controlplane-mono/secret-manager/api/gen"
-	"github.com/telekom/controlplane-mono/secret-manager/api/util"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/accesstoken"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/gen"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api/util"
 )
 
 const (

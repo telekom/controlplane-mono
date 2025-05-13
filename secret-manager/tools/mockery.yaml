@@ -4,7 +4,7 @@ dir: "../test/mocks"
 outpkg: "mocks"
 filename: "mock_{{.InterfaceName}}.go"
 packages:
-  cp.ei.telekom.de/secret-manager/pkg/backend:
+  github.com/telekom/controlplane-mono/secret-manager/pkg/backend:
     config:
     interfaces:
       Onboarder:
@@ -13,12 +13,12 @@ packages:
         config:
       SecretId:
         config:
-  cp.ei.telekom.de/secret-manager/pkg/backend/conjur:
+  github.com/telekom/controlplane-mono/secret-manager/pkg/backend/conjur:
     config:
     interfaces:
       ConjurAPI:
         config:
-  cp.ei.telekom.de/secret-manager/pkg/backend/encrypt:
+  github.com/telekom/controlplane-mono/secret-manager/pkg/backend/encrypt:
     config:
     interfaces:
       Encrypter:

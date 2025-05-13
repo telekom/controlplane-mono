@@ -90,9 +90,7 @@ release:
 
     ---
 
-    # Docker Images
-
-    - `docker pull ghcr.io/telekom/controlplane-mono/gateway:{{ .Tag }}`
+    ✨🎉
 
 sboms:
   - artifacts: archive

@@ -7,8 +7,8 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
-	"github.com/telekom/controlplane-mono/secret-manager/api"
-	secrets "github.com/telekom/controlplane-mono/secret-manager/api"
+	"github.com/telekom/controlplane-mono/secret-manager/pkg/api"
+	secrets "github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"

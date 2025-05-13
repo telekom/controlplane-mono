@@ -13,7 +13,7 @@ import (
 	identityv1 "github.com/telekom/controlplane-mono/identity/api/v1"
 	realmHandler "github.com/telekom/controlplane-mono/identity/internal/handler/realm"
 	"github.com/telekom/controlplane-mono/identity/pkg/keycloak"
-	secrets "github.com/telekom/controlplane-mono/secret-manager/api"
+	secrets "github.com/telekom/controlplane-mono/secret-manager/pkg/api"
 )
 
 var _ handler.Handler[*identityv1.Client] = &HandlerClient{}
