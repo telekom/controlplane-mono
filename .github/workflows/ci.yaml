@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
       - name: Build Matrix
         id: text
         run: |
@@ -40,7 +42,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: ${{ matrix.subproject }}/go.mod
       - uses: actions/cache@v4
         with:
           path: |
@@ -51,6 +53,7 @@ jobs:
       - name: Run tests
         run: make test
         working-directory: ${{ matrix.subproject }}
+
         env:
           ENVTEST_K8S_VERSION: "1.31.0"
           
@@ -68,7 +71,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: ${{ matrix.operator }}/go.mod
       - uses: actions/cache@v4
         with:
           path: |
