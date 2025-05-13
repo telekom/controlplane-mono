@@ -6,7 +6,23 @@
 version: 2
 updates:
   - package-ecosystem: gomod
-    directory: /
+    directory: common
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: common-server
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: gateway
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: identity
+    schedule:
+      interval: weekly
+  - package-ecosystem: gomod
+    directory: secret-manager
     schedule:
       interval: weekly
   - package-ecosystem: github-actions
