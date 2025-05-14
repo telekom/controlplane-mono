@@ -4,7 +4,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/bytedance/sonic"
 	"github.com/dgraph-io/badger/v4"
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
@@ -13,6 +12,7 @@ import (
 	"github.com/telekom/controlplane-mono/common-server/pkg/store"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store/inmemory/filter"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store/inmemory/patch"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 	"github.com/tidwall/gjson"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -98,7 +98,7 @@ func (s *InmemoryObjectStore[T]) Get(ctx context.Context, namespace, name string
 		}
 
 		return item.Value(func(val []byte) error {
-			return sonic.Unmarshal(val, &result)
+			return utils.Unmarshal(val, &result)
 		})
 	})
 
@@ -175,7 +175,7 @@ func (s *InmemoryObjectStore[T]) List(ctx context.Context, listOpts store.ListOp
 			}
 
 			if value != nil {
-				err = sonic.Unmarshal(value, &result.Items[iterNum])
+				err = utils.Unmarshal(value, &result.Items[iterNum])
 				if err != nil {
 					return errors.Wrap(err, "invalid object")
 				}
@@ -295,7 +295,7 @@ func (s *InmemoryObjectStore[T]) Patch(ctx context.Context, namespace, name stri
 		return obj, errors.Wrap(err, "failed to patch object")
 	}
 
-	err = sonic.Unmarshal(value, &obj)
+	err = utils.Unmarshal(value, &obj)
 	if err != nil {
 		return obj, errors.Wrap(err, "failed to unmarshal patched object")
 	}
@@ -310,7 +310,7 @@ func (s *InmemoryObjectStore[T]) OnUpdate(ctx context.Context, obj *unstructured
 	key := calculateKey(obj)
 	informer.SanitizeObject(obj)
 
-	data, err := sonic.Marshal(obj.Object)
+	data, err := utils.Marshal(obj.Object)
 	if err != nil {
 		return errors.Wrap(err, "invalid object")
 	}

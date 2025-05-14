@@ -7,12 +7,12 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/bytedance/sonic"
 	"github.com/dgraph-io/badger/v4"
 	"github.com/pkg/errors"
 	"github.com/telekom/controlplane-mono/common-server/internal/informer"
 	"github.com/telekom/controlplane-mono/common-server/pkg/problems"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 )
 
 type SortableStore[T store.Object] struct {
@@ -136,7 +136,7 @@ func (s *SortableStore[T]) listSorted(_ context.Context, listOpts store.ListOpts
 
 	s.log.V(1).Info("list sorted", "start", start, "end", end, "size", len(items))
 	for i, item := range items[start:end] {
-		err := sonic.Unmarshal(item.data, &result.Items[i])
+		err := utils.Unmarshal(item.data, &result.Items[i])
 		if err != nil {
 			return nil, errors.Wrap(err, "invalid object")
 		}
