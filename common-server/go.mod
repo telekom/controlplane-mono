@@ -32,6 +32,8 @@ require (
 
 replace github.com/telekom/controlplane-mono/secret-manager => ../secret-manager
 
+replace github.com/chenzhuoyu/iasm v0.9.0 => github.com/cloudwego/iasm v0.2.0
+
 require (
 	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
