@@ -98,7 +98,7 @@ jobs:
             ~/.go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
-      - uses: ko-build/setup-ko@v0.8
+      - uses: ko-build/setup-ko@v0.9
       - name: Inject slug vars
         uses: rlespinasse/github-slug-action@v5
       - run: ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
