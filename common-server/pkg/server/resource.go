@@ -3,12 +3,12 @@ package server
 import (
 	"fmt"
 
-	"github.com/bytedance/sonic"
 	"github.com/go-logr/logr"
 	"github.com/gofiber/fiber/v2"
 	"github.com/telekom/controlplane-mono/common-server/pkg/problems"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/middleware/security"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
@@ -101,7 +101,7 @@ func (r *ResourceController) Patch(c *fiber.Ctx) error {
 	ctx := c.UserContext()
 
 	patches := []store.Patch{}
-	err := sonic.Unmarshal(c.Body(), &patches)
+	err := utils.Unmarshal(c.Body(), &patches)
 	if err != nil {
 		return ReturnWithError(c, problems.BadRequest("invalid body"))
 	}

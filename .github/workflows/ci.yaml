@@ -21,7 +21,6 @@ on:
       - 'identity/**'
 
 jobs:
-
   prepare:
     name: detect modules
     runs-on: ubuntu-latest
@@ -42,7 +41,7 @@ jobs:
       - name: Print changed modules
         run: |
           echo "Changed modules output:"
-          echo "${{ steps.detect-changes.outputs.changed-modules }}"
+          echo "${{ fromJson(steps.detect-changes.outputs.changed-modules) }}"
       - name: Build Matrix
         id: matrix
         run: |

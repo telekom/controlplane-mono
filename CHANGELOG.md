@@ -1,3 +1,17 @@
+## [0.3.4](https://github.com/telekom/controlplane-mono/compare/v0.3.3...v0.3.4) (2025-05-15)
+
+
+### Bug Fixes
+
+* **goreleaser:** cannt use hook go-mod-tidy ([1e9ac20](https://github.com/telekom/controlplane-mono/commit/1e9ac2072bef28f976f8a19a871bf59cee1217b3))
+
+## [0.3.3](https://github.com/telekom/controlplane-mono/compare/v0.3.2...v0.3.3) (2025-05-15)
+
+
+### Bug Fixes
+
+* **ort:** changes relevant to fixing the ort issues and violations ([#28](https://github.com/telekom/controlplane-mono/issues/28)) ([89ba029](https://github.com/telekom/controlplane-mono/commit/89ba029ebf15509ff9993b137f32fb1152656c60))
+
 ## [0.3.2](https://github.com/telekom/controlplane-mono/compare/v0.3.1...v0.3.2) (2025-05-07)
 
 

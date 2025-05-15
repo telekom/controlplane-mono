@@ -5,13 +5,13 @@ import (
 
 	"golang.org/x/exp/slices"
 
-	"github.com/bytedance/sonic"
 	"github.com/go-logr/logr"
 	"github.com/gofiber/fiber/v2"
 	"github.com/telekom/controlplane-mono/common-server/pkg/problems"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/middleware/security"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/template"
 	"github.com/telekom/controlplane-mono/common-server/pkg/store"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -231,7 +231,7 @@ func (r *PredefinedController) finalizePatches(c *fiber.Ctx, patches []store.Pat
 	lookUp := map[string]any{}
 	rawBody := c.Body()
 	if len(rawBody) > 0 {
-		if err := sonic.Unmarshal(rawBody, &lookUp); err != nil {
+		if err := utils.Unmarshal(rawBody, &lookUp); err != nil {
 			return false, ReturnWithError(c, problems.BadRequest("invalid body"))
 		}
 	}
