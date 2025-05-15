@@ -20,7 +20,7 @@ permissions:
 env:
   GO_VERSION: stable
   GOLANGCI_LINT_VERSION: v2.1
-  COMPONENTS: '["common","common-server","secret-manager","gateway","identity"]'
+  MODULES: '["common","common-server","secret-manager","gateway","identity"]'
 
 jobs:
   golangci:
