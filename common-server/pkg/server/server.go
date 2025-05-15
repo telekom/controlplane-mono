@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bytedance/sonic"
 	"github.com/go-logr/logr"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -14,6 +13,7 @@ import (
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/middleware"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/middleware/metrics"
 	"github.com/telekom/controlplane-mono/common-server/pkg/server/middleware/security"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
@@ -75,8 +75,8 @@ func NewAppConfig() AppConfig {
 			WriteTimeout: 10 * time.Second,
 			IdleTimeout:  60 * time.Second,
 			ErrorHandler: ReturnWithError,
-			JSONEncoder:  sonic.Marshal,
-			JSONDecoder:  sonic.Unmarshal,
+			JSONEncoder:  utils.Marshal,
+			JSONDecoder:  utils.Unmarshal,
 
 			EnablePrintRoutes:     false,
 			DisableStartupMessage: true,

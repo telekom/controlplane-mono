@@ -1,11 +1,10 @@
 name: Go CI
 
 # todo: add more rules
-on:      
+on:
   push:
 
 jobs:
-
   prepare:
     runs-on: ubuntu-latest
     outputs:
@@ -16,6 +15,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Go
         uses: actions/setup-go@v5
+      - name: Detect Changes
+        id: detect-changes
+        uses: ron96G/monutil@v1.2.0
+        with:
+          base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
+          head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
+      - name: Print changed modules
+        run: |
+          echo "Changed modules output:"
+          echo "${{ fromJson(steps.detect-changes.outputs.changed-modules) }}"
       - name: Build Matrix
         id: matrix
         run: |
@@ -66,7 +75,7 @@ jobs:
           name: test-log-${{ matrix.subproject }}
           path: /tmp/gotest.log
           if-no-files-found: error
-          
+
   build-operators:
     name: Build operators
     runs-on: ubuntu-latest
@@ -92,10 +101,8 @@ jobs:
       - uses: ko-build/setup-ko@v0.8
       - name: Inject slug vars
         uses: rlespinasse/github-slug-action@v5
-      - run: ko build ${{ matrix.subproject }}/cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
+      - run: ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
         env:
           KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
         working-directory: ${{ matrix.subproject }}
-
-
 # TODO: build other subprojects

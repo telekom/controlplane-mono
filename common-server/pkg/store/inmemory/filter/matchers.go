@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/bytedance/sonic"
+	"github.com/telekom/controlplane-mono/common-server/pkg/utils"
 )
 
 type Equality interface {
@@ -39,7 +39,7 @@ func (r *Regex) Equal(value any) bool {
 	case string:
 		return r.pattern.MatchString(value)
 	default:
-		b, err := sonic.Marshal(value)
+		b, err := utils.Marshal(value)
 		if err != nil {
 			return false
 		}
@@ -66,7 +66,7 @@ func (s *Simple) Equal(value any) bool {
 	case float64:
 		return s.value == strconv.FormatFloat(value, 'f', -1, 64)
 	default:
-		b, err := sonic.Marshal(value)
+		b, err := utils.Marshal(value)
 		if err != nil {
 			return false
 		}
