@@ -1,8 +1,28 @@
-name: Go CI
+name: go-build-test
 
-# todo: add more rules
-on:      
+on:
   push:
+    branches:
+      - "main"
+      - "feature/**"
+      - "feat/**"
+      - "release/**"
+      - "dependabot/**"
+    paths:
+      - 'common/**'
+      - 'common-server/**'
+      - 'secret-manager/**'
+      - 'gateway/**'
+      - 'identity/**'
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - 'common/**'
+      - 'common-server/**'
+      - 'secret-manager/**'
+      - 'gateway/**'
+      - 'identity/**'
 
 jobs:
 
@@ -13,9 +33,9 @@ jobs:
       operators: ${{ steps.matrix.outputs.operators }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
       - name: Build Matrix
         id: matrix
         run: |
@@ -38,9 +58,9 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
         with:
           go-version-file: ${{ matrix.subproject }}/go.mod
       - uses: actions/cache@v4
