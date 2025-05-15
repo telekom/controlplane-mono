@@ -9,12 +9,6 @@ on:
       - "feat/**"
       - "release/**"
       - "dependabot/**"
-    paths:
-      - 'common/**'
-      - 'common-server/**'
-      - 'secret-manager/**'
-      - 'gateway/**'
-      - 'identity/**'
   pull_request:
     branches:
       - "main"
@@ -37,6 +31,16 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
+      - name: Detect Changes
+        id: detect-changes
+        uses: ron96G/monutil@v1.1.2
+        with:
+          base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
+          head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
+      - name: Print changed modules
+        run: |
+          echo "Changed modules output:"
+          echo "${{ steps.detect-changes.outputs.changed-modules }}"
       - name: Build Matrix
         id: matrix
         run: |
