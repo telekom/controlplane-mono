@@ -1,0 +1,7 @@
+- id: "Go::go.uber.org/mock"
+  curations:
+    concluded_license: Apache-2.0
+    comment: |
+      This project is licensed under the Apache-2.0 License. See the LICENSE file for more details.
+      The copyright garbage found by ORT is just a link to the license file.
+      TODO: this could potentially be added to the copyright-garbage file.
