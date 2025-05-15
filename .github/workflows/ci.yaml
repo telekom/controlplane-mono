@@ -1,3 +1,4 @@
+# TODO: Pin all actions to a specific version
 name: ci
 
 on:
@@ -177,7 +178,7 @@ jobs:
           recreate: true
           path: code-coverage-results.md
           
-  build-push-operator-image:
+  build-push-operator-image: #TODO: Fix output for digest
     name: Build operators
     runs-on: ubuntu-latest
     needs: [prepare, make-test]
@@ -211,14 +212,18 @@ jobs:
           digest=$(echo "$output" | grep -o 'sha256:[a-f0-9]\{64\}')
           echo "digest=$digest" >> $GITHUB_OUTPUT
         env:
-          KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
+          KO_DOCKER_REPO: ghcr.io/${{ github.repository }}/${{ matrix.subproject }}
         working-directory: ${{ matrix.subproject }}
 
-  scan-operator-image:
+  scan-operator-image: #TODO: Use digest instead of tag from build-push-operator-image
     name: Scan operator image
     runs-on: ubuntu-latest
     needs:
       - build-push-operator-image
+    strategy:
+      fail-fast: false
+      matrix:
+        subproject: ${{ fromJson(needs.prepare.outputs.operators) }}
     steps:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
@@ -226,7 +231,7 @@ jobs:
           TRIVY_USERNAME: ${{ secrets.GITHUB_ACTOR }}
           TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
-          image-ref: 'ghcr.io/${{ github.repository }}@${{ needs.build-push-operator-image.outputs.image-digest }}'
+          image-ref: 'ghcr.io/${{ github.repository }}/${{ matrix.subproject }}:${{ GITHUB_REF_SLUG }}'
           exit-code: '1'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
