@@ -1,4 +1,4 @@
-name: go-build-test
+name: ci
 
 on:
   workflow_dispatch:
@@ -117,7 +117,7 @@ jobs:
       - uses: ko-build/setup-ko@v0.8
       - name: Inject slug vars
         uses: rlespinasse/github-slug-action@v5
-      - run: ko build ${{ matrix.subproject }}/cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
+      - run: ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
         env:
           KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
         working-directory: ${{ matrix.subproject }}
