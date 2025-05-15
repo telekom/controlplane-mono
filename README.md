@@ -6,8 +6,6 @@ SPDX-License-Identifier: CC0-1.0
 
 # Controlplane Mono Repo
 
-test
-
 ## About 
 
 This project is ...
