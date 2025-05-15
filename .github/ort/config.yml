@@ -29,5 +29,27 @@ ort:
     storageReaders: ["local"]
     storageWriters: ["local"]
     skipExcluded: true
+    skipConcluded: true
   advisor:
     skipExcluded: true
+
+excludes:
+  paths:
+  - pattern: "test-data/**"
+    reason: "TEST_OF"
+    comment: "This directory contains test data which are not distributed."
+  - pattern: CONTRIBUTING.md
+    reason: DOCUMENTATION_OF
+    comment: "This file contains contribution guidelines which are not distributed."
+  - pattern: README.md	
+    reason: DOCUMENTATION_OF
+    comment: "This file contains project description which is not distributed."
+  - pattern: ".github/**"
+    reason: "BUILD_TOOL_OF"
+    comment: "This directory contains GitHub Actions workflows which are not distributed."
+  - pattern: "*_test.go"
+    reason: "TEST_OF"
+    comment: "This file contains test code which is not distributed."
+  - pattern: "test_*.go"
+    reason: "TEST_OF"
+    comment: "This file contains test code which is not distributed."

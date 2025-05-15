@@ -16,6 +16,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
       - name: Detect Changes
+        id: detect-changes
         uses: ron96G/monutil@v1.1.2
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
@@ -23,7 +24,7 @@ jobs:
       - name: Print changed modules
         run: |
           echo "Changed modules output:"
-          echo "${{ steps.run_my_action.outputs.changed-modules }}"
+          echo "${{ steps.detect-changes.outputs.changed-modules }}"
       - name: Build Matrix
         id: matrix
         run: |
