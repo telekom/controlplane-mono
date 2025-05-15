@@ -184,7 +184,7 @@ jobs:
     needs: [prepare, make-test]
     outputs:
       image-digest: ${{ steps.build-operators.outputs.digest }}
-      image-tag: ${{ steps.build-operators.outputs.image-digest }}
+      image-tag: ${{ steps.build-operators.outputs.tag }}
     strategy:
       fail-fast: false
       matrix:
@@ -211,6 +211,8 @@ jobs:
           echo "$output"
           digest=$(echo "$output" | grep -o 'sha256:[a-f0-9]\{64\}')
           echo "digest=$digest" >> $GITHUB_OUTPUT
+          tag=$(echo ${{ github.ref }} | cut -c11-) # get tag name without tags/refs/ prefix.
+          echo "tag=$tag" >> $GITHUB_OUTPUT
         env:
           KO_DOCKER_REPO: ghcr.io/${{ github.repository }}/${{ matrix.subproject }}
         working-directory: ${{ matrix.subproject }}
@@ -231,7 +233,7 @@ jobs:
           TRIVY_USERNAME: ${{ secrets.GITHUB_ACTOR }}
           TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
-          image-ref: 'ghcr.io/${{ github.repository }}/${{ matrix.subproject }}:${{ GITHUB_REF_SLUG }}'
+          image-ref: 'ghcr.io/${{ github.repository }}/${{ matrix.subproject }}@${{ needs.build-push-operator-image.outputs.image-tag }}'
           exit-code: '1'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
