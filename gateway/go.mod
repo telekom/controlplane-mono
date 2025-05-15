@@ -32,6 +32,8 @@ replace (
 	github.com/telekom/controlplane-mono/secret-manager => ../secret-manager
 )
 
+replace github.com/chenzhuoyu/iasm v0.9.0 => github.com/cloudwego/iasm v0.2.0
+
 require (
 	cel.dev/expr v0.18.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
