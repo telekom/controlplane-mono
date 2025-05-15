@@ -34,6 +34,8 @@ require (
 
 replace github.com/telekom/controlplane-mono/common-server => ../common-server
 
+replace github.com/chenzhuoyu/iasm v0.9.0 => github.com/cloudwego/iasm v0.2.0
+
 require (
 	al.essio.dev/pkg/shellescape v1.5.1 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
