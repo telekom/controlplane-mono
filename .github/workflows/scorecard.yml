@@ -12,7 +12,9 @@ on:
   schedule:
     - cron: '42 1 * * 1'
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "feat/ci" #TODO Remove before PR - only for testing
 
 # Declare default permissions as read only.
 permissions: read-all

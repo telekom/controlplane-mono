@@ -2,6 +2,8 @@ name: govulncheck
 on:
   workflow_dispatch:
   push:
+    branches:
+      - "feat/ci" #TODO Remove before PR - only for testing
     paths:
       - 'common/go.sum'
       - 'common-server/go.sum'
