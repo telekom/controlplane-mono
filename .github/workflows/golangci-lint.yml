@@ -20,7 +20,6 @@ permissions:
 env:
   GO_VERSION: stable
   GOLANGCI_LINT_VERSION: v2.1
-  MODULES: '["common","common-server","secret-manager","gateway","identity"]'
 
 jobs:
   golangci:
@@ -29,7 +28,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ${{ fromJson(env.MODULES) }}
+        module:
+          - common
+          - common-server
+          - secret-manager
+          - gateway
+          - identity
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
