@@ -6,3 +6,6 @@ dist/
 
 # editor and IDE paraphernalia
 .idea
+
+# ignore test output
+gotest.log

@@ -1,23 +1,40 @@
-name: Go CI
+# TODO: Pin all actions to a specific version
+name: ci
 
-# todo: add more rules
 on:
+  workflow_dispatch:
   push:
+    branches:
+      - "main"
+      - "feature/**"
+      - "feat/**"
+      - "release/**"
+      - "dependabot/**"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - 'common/**'
+      - 'common-server/**'
+      - 'secret-manager/**'
+      - 'gateway/**'
+      - 'identity/**'
 
 jobs:
   prepare:
+    name: detect modules
     runs-on: ubuntu-latest
     outputs:
       subprojects: ${{ steps.matrix.outputs.subprojects }}
       operators: ${{ steps.matrix.outputs.operators }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
       - name: Detect Changes
         id: detect-changes
-        uses: ron96G/monutil@v1.2.0
+        uses: ron96G/monutil@v1.1.2
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
           head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
@@ -33,7 +50,36 @@ jobs:
           echo "subprojects=$subprojects" >> $GITHUB_OUTPUT
           echo "operators=$operators" >> $GITHUB_OUTPUT
 
-  test:
+  check-generated-changes:
+    name: verify generated files
+    runs-on: ubuntu-latest
+    needs: prepare
+    strategy:
+      fail-fast: false # run all tests even if one fails
+      matrix:
+        subproject: ${{ fromJson(needs.prepare.outputs.operators) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
+      - name: Restore Go cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/.go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      - name: Generate manifests
+        run: make manifests
+        working-directory: ${{ matrix.subproject }}
+      - name: Generate boilerplate
+        run: make generate
+        working-directory: ${{ matrix.subproject }}
+      - name: Ensure nothing has changed
+        run: git diff --exit-code -- . ':!go.sum' ':!go.mod'
+        working-directory: ${{ matrix.subproject }}
+
+
+  make-test:
     name: Run unit tests
     runs-on: ubuntu-latest
     needs: prepare
@@ -47,9 +93,9 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
         with:
           go-version-file: ${{ matrix.subproject }}/go.mod
       - uses: actions/cache@v4
@@ -68,18 +114,76 @@ jobs:
         env:
           ENVTEST_K8S_VERSION: "1.31.0"
 
-      - name: Upload test log
+      - name: Generate HTML coverage report
+        run: go tool cover -html=cover.out -o coverage.html
+        working-directory: ${{ matrix.subproject }}
+
+      - name: Generate Cobertura coverage report
+        run: |
+            go install github.com/boumenot/gocover-cobertura@latest
+            gocover-cobertura < cover.out > cobertura.xml
+        working-directory: ${{ matrix.subproject }}
+
+      - name: Upload go test log
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pin@v4.6.2
         if: always()
         with:
-          name: test-log-${{ matrix.subproject }}
-          path: /tmp/gotest.log
+          name: ${{ matrix.subproject }}-gotest.log
+          path: ${{ matrix.subproject }}/gotest.log
           if-no-files-found: error
 
-  build-operators:
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.subproject }}-test-report
+          path: |
+            ${{ matrix.subproject }}/cover.out
+            ${{ matrix.subproject }}/coverage.html
+            ${{ matrix.subproject }}/cobertura.xml
+            ${{ matrix.subproject }}/junit.xml
+
+      - name: Publish test report
+        uses: mikepenz/action-junit-report@v5
+        if: always() && github.event_name == 'pull_request'
+        with:
+          report_paths: '${{ matrix.subproject }}/junit.xml'
+          check_name: Test Report
+          comment: true
+          include_passed: true
+
+      - name: Prepare coverage comment
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        if: always() && github.event_name == 'pull_request'
+        with:
+          filename: ${{ matrix.subproject }}/cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Append coverage comment
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          sudo chown $(whoami) code-coverage-results.md
+          printf "\nDownload the latest HTML coverage report [here](${{ steps.upload-results.outputs.artifact-url }})." >> code-coverage-results.md
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: always() && github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+          
+  build-push-operator-image: #TODO: Fix output for digest
     name: Build operators
     runs-on: ubuntu-latest
-    needs: [prepare, test]
+    needs: [prepare, make-test]
+    outputs:
+      image-digest: ${{ steps.build-operators.outputs.digest }}
+      image-tag: ${{ steps.build-operators.outputs.tag }}
     strategy:
       fail-fast: false
       matrix:
@@ -101,8 +205,37 @@ jobs:
       - uses: ko-build/setup-ko@v0.8
       - name: Inject slug vars
         uses: rlespinasse/github-slug-action@v5
-      - run: ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG}
+      - run: |
+          output=$(ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG})
+          echo "$output"
+          digest=$(echo "$output" | grep -o 'sha256:[a-f0-9]\{64\}')
+          echo "digest=$digest" >> $GITHUB_OUTPUT
+          tag=$(echo ${{ github.ref }} | cut -c11-) # get tag name without tags/refs/ prefix.
+          echo "tag=$tag" >> $GITHUB_OUTPUT
         env:
-          KO_DOCKER_REPO: ghcr.io/telekom/controlplane-mono/${{ matrix.subproject }}
+          KO_DOCKER_REPO: ghcr.io/${{ github.repository }}/${{ matrix.subproject }}
         working-directory: ${{ matrix.subproject }}
+
+#  scan-operator-image: #TODO: Use digest instead of tag from build-push-operator-image
+#    name: Scan operator image
+#    runs-on: ubuntu-latest
+#    needs:
+#      - prepare
+#      - build-push-operator-image
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        subproject: ${{ fromJson(needs.prepare.outputs.operators) }}
+#    steps:
+#      - name: Run Trivy vulnerability scanner
+#        uses: aquasecurity/trivy-action@0.28.0
+#        env:
+#          TRIVY_USERNAME: ${{ secrets.GITHUB_ACTOR }}
+#          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          image-ref: 'ghcr.io/${{ github.repository }}/${{ matrix.subproject }}@${{ needs.build-push-operator-image.outputs.image-tag }}'
+#          exit-code: '1'
+#          vuln-type: 'os,library'
+#          severity: 'CRITICAL,HIGH'
+
 # TODO: build other subprojects
