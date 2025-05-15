@@ -221,6 +221,7 @@ jobs:
     name: Scan operator image
     runs-on: ubuntu-latest
     needs:
+      - prepare
       - build-push-operator-image
     strategy:
       fail-fast: false
