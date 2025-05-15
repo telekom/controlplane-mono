@@ -7,6 +7,7 @@ on:
       - 'secret-manager/go.sum'
       - 'gateway/go.sum'
       - 'identity/go.sum'
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 
