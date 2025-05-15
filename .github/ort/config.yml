@@ -26,30 +26,17 @@ ort:
           localFileStorage:
             directory: /home/ort/.ort/scanner/results
             compression: false
-    storageReaders: ["local"]
-    storageWriters: ["local"]
+      # Read/write results to OpenSource@DTIT ORT cache on artifactory
+      artifactory:
+        backend:
+          httpFileStorage:
+            url: "https://artifactory.devops.telekom.de/artifactory/open-source-dtit-ort-generic/ort/scan-results"
+            headers:
+              Authorization: "Bearer ${ORT_ARTIFACTORY_TOKEN}"
+      # ClearlyDefined is disabled because it only produces 404s...
+    storageReaders: ["local", "artifactory"]
+    storageWriters: ["artifactory", "local"]
     skipExcluded: true
     skipConcluded: true
   advisor:
     skipExcluded: true
-
-  excludes:
-    paths:
-    - pattern: "test-data/**"
-      reason: "TEST_OF"
-      comment: "This directory contains test data which are not distributed."
-    - pattern: "CONTRIBUTING.md"
-      reason: DOCUMENTATION_OF
-      comment: "This file contains contribution guidelines which are not distributed."
-    - pattern: "README.md"
-      reason: DOCUMENTATION_OF
-      comment: "This file contains project description which is not distributed."
-    - pattern: ".github/**"
-      reason: "BUILD_TOOL_OF"
-      comment: "This directory contains GitHub Actions workflows which are not distributed."
-    - pattern: "*_test.go"
-      reason: "TEST_OF"
-      comment: "This file contains test code which is not distributed."
-    - pattern: "test_*.go"
-      reason: "TEST_OF"
-      comment: "This file contains test code which is not distributed."
