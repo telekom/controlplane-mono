@@ -3,9 +3,15 @@ name: golangci-lint
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "feat/ci" #TODO Remove before PR - only for testing
+    paths:
+      - 'common/**'
+      - 'common-server/**'
+      - 'secret-manager/**'
+      - 'gateway/**'
+      - 'identity/**'
   pull_request:
+    branches:
+      - "main"
     paths:
       - 'common/**'
       - 'common-server/**'
