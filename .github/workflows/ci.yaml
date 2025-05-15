@@ -114,13 +114,13 @@ jobs:
           ENVTEST_K8S_VERSION: "1.31.0"
 
       - name: Generate HTML coverage report
-        run: go tool cover -html=cover.profile -o coverage.html
+        run: go tool cover -html=cover.out -o coverage.html
         working-directory: ${{ matrix.subproject }}
 
       - name: Generate Cobertura coverage report
         run: |
             go install github.com/boumenot/gocover-cobertura@latest
-            gocover-cobertura < cover.profile > cobertura.xml
+            gocover-cobertura < cover.out > cobertura.xml
         working-directory: ${{ matrix.subproject }}
 
       - name: Upload test log
@@ -138,7 +138,7 @@ jobs:
         with:
           name: test-report
           path: |
-            ./cover.profile
+            ./cover.out
             ./coverage.html
             ./cobertura.xml
             ./junit.xml
