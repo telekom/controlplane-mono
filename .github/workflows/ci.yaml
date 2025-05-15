@@ -17,14 +17,14 @@ jobs:
         uses: actions/setup-go@v5
       - name: Detect Changes
         id: detect-changes
-        uses: ron96G/monutil@v1.1.2
+        uses: ron96G/monutil@v1.2.0
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
           head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
       - name: Print changed modules
         run: |
           echo "Changed modules output:"
-          echo "${{ steps.detect-changes.outputs.changed-modules }}"
+          echo "${{ fromJson(steps.detect-changes.outputs.changed-modules) }}"
       - name: Build Matrix
         id: matrix
         run: |
