@@ -11,7 +11,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze ${{ matrix.language }} code
+    name: Analyze code ${{ matrix.module }}
     runs-on: 'ubuntu-latest'
     permissions:
       security-events: write
@@ -40,7 +40,7 @@ jobs:
       with:
         path: |
           ~/.cache/go-build
-          ~/.go/pkg/mod
+          ~/go/pkg/mod
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
     - name: Initialize CodeQL

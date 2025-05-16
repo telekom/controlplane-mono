@@ -27,7 +27,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/.go/pkg/mod
+            ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
       - uses: sigstore/cosign-installer@v3.8.2
       - uses: anchore/sbom-action/download-syft@v0.19.0

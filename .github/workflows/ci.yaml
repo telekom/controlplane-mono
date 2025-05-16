@@ -62,7 +62,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/.go/pkg/mod
+            ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
       - name: Generate manifests
         run: make manifests
@@ -99,7 +99,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/.go/pkg/mod
+            ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
       - name: Set up gotestfmt
@@ -196,7 +196,7 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/.go/pkg/mod
+            ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
       - uses: ko-build/setup-ko@v0.8
