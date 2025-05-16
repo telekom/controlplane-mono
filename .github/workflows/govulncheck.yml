@@ -4,11 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'common/go.sum'
-      - 'common-server/go.sum'
-      - 'secret-manager/go.sum'
-      - 'gateway/go.sum'
-      - 'identity/go.sum'
+      - '**/go.sum'
   schedule:
     - cron: "0 0 * * *"
 
@@ -30,6 +26,8 @@ jobs:
           - gateway
           - identity
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
       - name: Setup Go
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
         with:
