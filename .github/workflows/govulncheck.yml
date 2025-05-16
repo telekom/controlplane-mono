@@ -32,9 +32,17 @@ jobs:
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
         with:
           go-version-file: ${{ matrix.module }}/go.mod
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+
       - name: govulncheck
         uses: golang/govulncheck-action@b625fbe08f3bccbe446d94fbf87fcc875a4f50ee # pin@1.0.4
         with:
-          go-version-input: '' # default is 'stable' which overrides the file input
-          go-version-file: ${{ matrix.module }}/go.mod
+          go-version-input: 'stable'
           go-package: ./...
+          work-dir: ${{ matrix.module }}
+        
