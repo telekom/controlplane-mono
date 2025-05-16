@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
       - name: Detect Changes
         id: detect-changes
-        uses: ron96G/monutil@v1.1.2
+        uses: ron96G/monutil@v1.3.0
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
           head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
