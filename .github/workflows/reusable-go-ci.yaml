@@ -61,7 +61,7 @@ on:
         description: "Version of the golangci-lint binary to use"
         required: false
         type: string
-        default: "v1.59.1"
+        default: v2.1
 
     outputs:
       image_digest:
@@ -109,7 +109,7 @@ jobs:
 
       - name: Run golangci-lint
         if: ${{ inputs.run_lint }}
-        uses: golangci/golangci-lint-action@4afd733a84b1f43292c63897423277bb7f4313a9 # pin@v6.0.1
+        uses: golangci/golangci-lint-action@4afd733a84b1f43292c63897423277bb7f4313a9 #pin@8.0.0
         with:
           version: ${{ inputs.golangci_lint_binary_version }}
           working-directory: ${{ inputs.module }}
