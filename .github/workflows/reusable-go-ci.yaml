@@ -227,7 +227,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         if: ${{ inputs.run_build_image }}
         with:
-          image-ref: ${{ inputs.container_registry }}/${{ inputs.github_repository }}/${{ inputs.module }}:${{ steps.build_image_ko_step.outputs.digest }}
+          image-ref: ${{ inputs.container_registry }}/${{ inputs.github_repository }}/${{ inputs.module }}@${{ steps.build_image_ko_step.outputs.digest }}
           exit-code: "1"
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
