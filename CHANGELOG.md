@@ -1,3 +1,17 @@
+# [0.4.0](https://github.com/telekom/controlplane-mono/compare/v0.3.4...v0.4.0) (2025-05-15)
+
+
+### Features
+
+* **ci:** Extend ci workflow and add code and quality scanners ([#31](https://github.com/telekom/controlplane-mono/issues/31)) ([b3cfdbd](https://github.com/telekom/controlplane-mono/commit/b3cfdbdcf308d16f6ef81f1b9530af9c273d1b38))
+
+## [0.3.4](https://github.com/telekom/controlplane-mono/compare/v0.3.3...v0.3.4) (2025-05-15)
+
+
+### Bug Fixes
+
+* **goreleaser:** cannt use hook go-mod-tidy ([1e9ac20](https://github.com/telekom/controlplane-mono/commit/1e9ac2072bef28f976f8a19a871bf59cee1217b3))
+
 ## [0.3.3](https://github.com/telekom/controlplane-mono/compare/v0.3.2...v0.3.3) (2025-05-15)
 
 

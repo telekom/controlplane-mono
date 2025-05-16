@@ -1,25 +1,42 @@
 name: govulncheck
+
 on:
+  workflow_dispatch:
   push:
     paths:
-      - go.sum
+      - 'common/go.sum'
+      - 'common-server/go.sum'
+      - 'secret-manager/go.sum'
+      - 'gateway/go.sum'
+      - 'identity/go.sum'
   schedule:
     - cron: "0 0 * * *"
 
-permissions: read-all
+permissions:
+  # Required: allow read access to the content for analysis.
+  read-all
 
 jobs:
   govulncheck:
     name: govulncheck
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # run all tests even if one fails
+      matrix:
+        module:
+          - common
+          - common-server
+          - secret-manager
+          - gateway
+          - identity
     steps:
       - name: Setup Go
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
         with:
-          go-version: stable
+          go-version-file: ${{ matrix.module }}/go.mod
       - name: govulncheck
         uses: golang/govulncheck-action@b625fbe08f3bccbe446d94fbf87fcc875a4f50ee # pin@1.0.4
         with:
           go-version-input: '' # default is 'stable' which overrides the file input
-          go-version-file: go.mod
+          go-version-file: ${{ matrix.module }}/go.mod
           go-package: ./...
