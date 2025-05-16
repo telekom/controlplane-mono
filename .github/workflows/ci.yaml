@@ -39,7 +39,7 @@ jobs:
       module: ${{ matrix.module }}
       run_check_generated_files: true
       run_build_image: true
-      run_tests: false
+      run_tests: true
       ko_build_path: "cmd/main.go"
 
     permissions:
@@ -47,7 +47,7 @@ jobs:
       pull-requests: write
       checks: write
       security-events: write
-      packages: read
+      packages: write
       actions: read
     strategy:
       matrix:
