@@ -75,6 +75,10 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
+    files:
+      - LICENSE*
+      - README*
+      - CHANGELOG.md
 
 changelog:
   sort: asc
