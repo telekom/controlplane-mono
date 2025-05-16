@@ -226,9 +226,6 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         if: ${{ inputs.run_build_image }}
-        env:
-          TRIVY_USERNAME: ${{ secrets.GITHUB_ACTOR }}
-          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           image-ref: ${{ inputs.container_registry }}/${{ inputs.github_repository }}/${{ inputs.module }}:${{ steps.build_image_ko_step.outputs.digest }}
           exit-code: "1"
