@@ -18,6 +18,7 @@ repos:
     rev: v5.0.2
     hooks:
       - id: reuse-lint-file
+        exclude_types: [svg]
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.25.1
     hooks:
