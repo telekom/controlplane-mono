@@ -8,7 +8,7 @@ SPDX-License-Identifier: CC0-1.0
 
 ## About 
 
-This project is about ...
+This project is about this awesome ...
 <!-- TODO -->
 
 ## Code of Conduct
