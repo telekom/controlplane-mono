@@ -106,7 +106,7 @@ Rover Control Plane requires the following infrastructure components in order to
 
 ## Architecture
 The diagram below shows the general flow and interfaces between the most important components of The Rover Control Plane.
-# ![Architecture](.docs//img/CP_Architecture_2.drawio.svg)
+# ![Architecture](./docs//img/CP_Architecture_2.drawio.svg)
 
 ### Workflow
 
