@@ -72,85 +72,43 @@ Secret management involves securely storing, accessing, and distributing sensiti
 In addition to the core components, the control plane may also run custom operators. These are specialized control loops designed to manage complex domain-specific applications and configurations. These operators extend Kubernetes functionality using the [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/), combining custom resource definitions (CRDs) with controllers that automate lifecycle management.
 
 The following operators run on the control plane:
-- Rover Operator
-- Application Operator
-- Admin Operator
-- Organization Operator
-- API Operator
-- Gateway Operator
-- Identity Operator
-- Approval Operator
+- [Rover Operator](./rover): Manages the lifecycle of Rover-domain resources such as Rovers and ApiSpecifications.
+- [Application Operator](./application) Manages the lifecycle of resources of kind Application.
+- [Admin Operator](./admin): Manages the lifecycle of Admin-domain resources such as Environments, Zones and RemoteOrganizations.
+- [Organization Operator](./organization):  Manages the lifecycle of Organization-domain resources such as Groups and Teams.
+- [Api Operator](./api):  Manages the lifecycle of API-domain resources such as Apis, ApiExposures, ApiSubscriptions and RemoteApiSubscriptions.
+- [Gateway Operator}](./gateway):  Manages the lifecycle of Gateway-domain resources such as Gateways, Gateway-Realms, Consumers, Routes and ConsumerRoutes.
+- [Identity Operator](./identity):  Manages the lifecycle of Identity-domain resources such as IdentityProviders, Identity-Realms and Clients.
+- [Approval Operator](./approval):  Manages the lifecycle of resources of kind Approval.
 
 These operators work alongside the Kubernetes API server and etcd, watching for changes to custom resources and ensuring the actual state of their managed components aligns with the desired configuration.
 
 ### API Servers
-- Secret Manager: RESTful API for managing secrets. It allows you to store, retrieve, and delete secrets securely.
-- Rover-Server: RESTful API for managing Rover resources such as Applications, ApiSpecifications, ApiExposures, ApiSubscriptions
-- Organization-Server
-- Controlplane API
+- [Secret Manager](./secret-manager): RESTful API for managing secrets. It allows you to store, retrieve, and delete secrets securely.
+- [Rover-Server](./rover-server): RESTful API for managing Rover resources such as Rover Exposures and Subscriptions as well as ApiSpecifications
+- [Organization-Server](./organization-server): RESTful API for managing Organization resources such as Groups and Teams
+- [Controlplane API](./controlplane-api): RESTful API for reading custom resources from the control plane from all domains 
 
 ### Libraries
-- Common
-- Common-Server
+- [Common](./common): A library that provides shared code between the different projects
+- [Common-Server](./common-server): Module used to dynamically create REST-APIs for Kubernetes-CRDs.
 
 ### Infrastructure
 
 Rover Control Plane requires the following infrastructure components in order to operate correctly:
 
-- **Kubernetes**: The Rover Control Plane is designed to be deployed on Kubernetes. Currently, it is tested with Kubernetes version 1.31.
-
-
-### Utilities
-
-
+- **Kubernetes**: The Open Telekom Integration Platform Control Plane is designed to be deployed on Kubernetes. Currently, it is tested with Kubernetes version 1.31.
+- **API Management component**
+- **Identity Management component**
 
 ## Architecture
 The diagram below shows the general flow and interfaces between the most important components of The Rover Control Plane.
 # ![Architecture](./docs//img/CP_Architecture_2.drawio.svg)
 
-### Workflow
-
-## CRDs
-
-
-### Rover resource
-### Subscription resource
-### ...
-
-All subscription information is currently stored in "Subscription" custom resources which will be watched by the Horizon components.
-You can find the custom resource definition here: [resources/crds.yaml](./resources/crds.yaml).
-
-A simple example Subscription would look like this:
-
-
-<details>
-  <summary>Example Subscription</summary>
-
-  ```yaml
-  apiVersion: subscriber.horizon.telekom.de/v1
-  kind: Subscription
-  metadata:
-    name: 4ca708e09edfb9745b1c9ceeb070aacde42cf04f
-    namespace: prod
-  spec:
-    subscription:
-      callback: >-
-        https://billing-service.example.com/api/v1/callback
-      deliveryType: callback
-      payloadType: data
-      publisherId: ecommerce--shop--order-events-provider
-      subscriberId: ecommerce--billing--order-event-consumer
-      subscriptionId: 4ca708e09edfb9745b1c9ceeb070aacde42cf04f
-      trigger: {}
-      type: ecommerce.shop.orders.v1
-  ```
-</details><br />
-
-
 ## Getting started
 
-If you want to learn more about how to install and run the Rover Control Plane in a Kubernetes environment, visit: [Installing Rover Control Plane](./files/installation.md)  
-But if you want to get started right away with a non-productive local environment and try out Rover Control Plane, we recommend visting: [Local installation (Quickstart)](./files/quickstart.md). 
+If you want to learn more about how to install and run the Open Telekom Integration Platform Control Plane in a Kubernetes environment, visit: [Installing Control Plane](./files/installation.md)  
+But if you want to get started right away with a non-productive local environment and try out the Control Plane, we recommend visting: [Local installation (Quickstart)](./files/quickstart.md). 
 
 
 ## Code of Conduct
