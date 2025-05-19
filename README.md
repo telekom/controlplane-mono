@@ -64,11 +64,12 @@ Secret management involves securely storing, accessing, and distributing sensiti
 - Approval API: API for handling approval processes and workflows.
 - Team API: API for team management and related actions.
 - Catalog API: API to access and manage an API catalog
+- ControlPlane API
 </details>
 
 ## Components
 
-### Controllers
+### Operators
 In addition to the core components, the control plane may also run custom operators. These are specialized control loops designed to manage complex domain-specific applications and configurations. These operators extend Kubernetes functionality using the [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/), combining custom resource definitions (CRDs) with controllers that automate lifecycle management.
 
 The following operators run on the control plane:
@@ -106,10 +107,7 @@ The diagram below shows the general flow and interfaces between the most importa
 # ![Architecture](./docs//img/CP_Architecture_2.drawio.svg)
 
 ## Getting started
-
-If you want to learn more about how to install and run the Open Telekom Integration Platform Control Plane in a Kubernetes environment, visit: [Installing Control Plane](./files/installation.md)  
-But if you want to get started right away with a non-productive local environment and try out the Control Plane, we recommend visting: [Local installation (Quickstart)](./files/quickstart.md). 
-
+A comprehensive guide on how to get started with the installation of the Open Telekom Integration Platform is available here: [Getting Started](./files/getting_started.md)  
 
 ## Code of Conduct
 
