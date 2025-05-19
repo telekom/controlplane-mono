@@ -36,7 +36,6 @@ jobs:
   common:
     name: Common
     uses: ./.github/workflows/reusable-go-ci.yaml
-    needs: prepare
     with:
       module: common
       run_check_generated_files: false
@@ -46,7 +45,6 @@ jobs:
   common-server:
     name: Common Server
     uses: ./.github/workflows/reusable-go-ci.yaml
-    needs: prepare
     with:
       module: common-server
       run_check_generated_files: false
@@ -57,7 +55,6 @@ jobs:
   identity:
     name: Identity
     uses: ./.github/workflows/reusable-go-ci.yaml
-    needs: prepare
     with:
       module: identity
       run_check_generated_files: true
@@ -68,7 +65,6 @@ jobs:
   gateway:
     name: Gateway
     uses: ./.github/workflows/reusable-go-ci.yaml
-    needs: prepare
     with:
       module: gateway
       run_check_generated_files: true
@@ -79,7 +75,6 @@ jobs:
   secret-manager:
     name: Secret Manager
     uses: ./.github/workflows/reusable-go-ci.yaml
-    needs: prepare
     with:
       module: secret-manager
       run_check_generated_files: false
