@@ -1,4 +1,4 @@
-name: "Reusable Go Module CI Workflow"
+name: "Go CI"
 
 on:
   workflow_call:
@@ -57,19 +57,16 @@ on:
         required: false
         type: string
         default: "ghcr.io"
-      golangci_lint_binary_version:
-        description: "Version of the golangci-lint binary to use"
+      image_tags:
+        description: "Comma-separated list of tags to apply to the built image. If empty, GITHUB_REF_SLUG will be used."
         required: false
         type: string
-        default: v2.1
+        default: ""
 
     outputs:
       image_digest:
         description: "Image digest from the build image step"
         value: ${{ jobs.build.outputs.image_digest }}
-      image_tag:
-        description: "Image tag from the build image step"
-        value: ${{ jobs.build.outputs.image_tag }}
 
 jobs:
   static_checks:
@@ -111,7 +108,7 @@ jobs:
         if: ${{ inputs.run_lint }}
         uses: golangci/golangci-lint-action@4afd733a84b1f43292c63897423277bb7f4313a9 #pin@8.0.0
         with:
-          version: ${{ inputs.golangci_lint_binary_version }}
+          version: v2.1
           working-directory: ${{ inputs.module }}
           args: --timeout 5m --issues-exit-code=0 # Ignore issues for now
 
@@ -308,7 +305,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image_digest: ${{ steps.build_image_ko_step.outputs.digest }}
-      image_tag: ${{ steps.build_image_ko_step.outputs.tag }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
@@ -349,19 +345,19 @@ jobs:
             echo "Error: github_repository and github_ref inputs are required when run_build_image is true."
             exit 1
           fi
-          output=$(ko build ${{ inputs.ko_build_path }} --bare --tags "${GITHUB_REF_SLUG}")
+
+          effective_tags=""
+          if [ -n "${{ inputs.image_tags }}" ]; then
+            effective_tags="${{ inputs.image_tags }}"
+          else
+            effective_tags="${GITHUB_REF_SLUG}"
+          fi
+
+          echo "Building with tags: $effective_tags"
+          output=$(ko build ${{ inputs.ko_build_path }} --bare --tags "$effective_tags")
           echo "Ko output: $output"
           digest=$(echo "$output" | grep -o 'sha256:[a-f0-9]\{64\}')
           echo "digest=$digest" >> $GITHUB_OUTPUT
-          tag_value=""
-          if [[ "${{ inputs.github_ref }}" == refs/tags/* ]]; then
-            tag_value=$(echo "${{ inputs.github_ref }}" | sed 's_refs/tags/\\(.*\\)_\\1_')
-          elif [[ "${{ inputs.github_ref }}" == refs/pull/* ]]; then
-            tag_value="pr-${GITHUB_HEAD_REF_SLUG:-$GITHUB_REF_SLUG}"
-          else
-            tag_value="${GITHUB_REF_SLUG}"
-          fi
-          echo "tag=$tag_value" >> $GITHUB_OUTPUT
 
   image_scan:
     name: "Image Vulnerability Scan for ${{ inputs.module }}"

@@ -7,9 +7,13 @@ on:
     branches:
       - "main"
 
-env:
-  OPERATORS: '["gateway", "identity"]'
-  ALL_MODULES: '["common", "common-server", "gateway"]' # Updated for example
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  security-events: write
+  packages: write
+  actions: read
 
 jobs:
   prepare:
@@ -20,37 +24,65 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # pin@v2.0.0
+        with:
+          fetch-depth: 0
       - name: Detect Changes
         id: detect-changes
         uses: ron96G/monutil@v1.3.0
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
           head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
-      - name: Build Matrix
-        id: matrix
-        run: |
-          echo "modules=${{ toJson(env.ALL_MODULES) }}" >> $GITHUB_OUTPUT
 
-  operator-ci:
-    name: Operator CI for ${{ matrix.module }}
+  common:
+    name: Common
     uses: ./.github/workflows/reusable-go-ci.yaml
     needs: prepare
     with:
-      module: ${{ matrix.module }}
+      module: common
+      run_check_generated_files: false
+      run_build_image: false
+      run_tests: true
+
+  common-server:
+    name: Common Server
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: common-server
+      run_check_generated_files: false
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/server/server.go"
+
+  identity:
+    name: Identity
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: identity
       run_check_generated_files: true
       run_build_image: true
       run_tests: true
       ko_build_path: "cmd/main.go"
 
-    permissions:
-      contents: read
-      pull-requests: write
-      checks: write
-      security-events: write
-      packages: write
-      actions: read
-    strategy:
-      matrix:
-        module:
-          - "identity"
-          - "gateway"
+  gateway:
+    name: Gateway
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: gateway
+      run_check_generated_files: true
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/main.go"
+
+  secret-manager:
+    name: Secret Manager
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: secret-manager
+      run_check_generated_files: false
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/server/server.go"
