@@ -1,5 +1,4 @@
-# TODO: Pin all actions to a specific version
-name: ci
+name: Run CI
 
 on:
   workflow_dispatch:
@@ -8,9 +7,13 @@ on:
     branches:
       - "main"
 
-env:
-  OPERATORS: '["gateway", "identity"]'
-  ALL_MODULES: '["common", "common-server", "secret-manager", "gateway", "identity"]'
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  security-events: write
+  packages: write
+  actions: read
 
 jobs:
   prepare:
@@ -18,221 +21,68 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       modules: ${{ steps.matrix.outputs.modules }}
-      operators: ${{ steps.matrix.outputs.operators }}
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
-      - name: Setup Go
-        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
+        uses: actions/checkout@v2 # pin@v2.0.0
         with:
-          go-version: '^1.24'
+          fetch-depth: 0
       - name: Detect Changes
         id: detect-changes
         uses: ron96G/monutil@v1.3.0
         with:
           base-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event_name == 'push' && github.event.before }}
           head-commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event_name == 'push' && github.sha }}
-      - name: Build Matrix
-        id: matrix
-        run: |
-          echo "modules=${{ toJson(env.ALL_MODULES) }}" >> $GITHUB_OUTPUT
-          echo "operators=${{ toJson(env.OPERATORS) }}" >> $GITHUB_OUTPUT
-      - name: Print Matrix
-        run: |
-          echo "Changed modules output:"
-          echo "${{ fromJson(steps.detect-changes.outputs.changed-modules) }}"
-          echo "Operators output:"
-          echo "${{ env.OPERATORS }}"
-          echo "All modules output:"
-          echo "${{ env.ALL_MODULES }}"
 
-  check-generated-changes:
-    name: verify generated files
-    runs-on: ubuntu-latest
+  common:
+    name: Common
+    uses: ./.github/workflows/reusable-go-ci.yaml
     needs: prepare
-    strategy:
-      fail-fast: false # run all tests even if one fails
-      matrix:
-        module: ${{ fromJson(needs.prepare.outputs.operators) }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
-      - name: Restore Go cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-      - name: Generate manifests
-        run: make manifests
-        working-directory: ${{ matrix.module }}
-      - name: Generate boilerplate
-        run: make generate
-        working-directory: ${{ matrix.module }}
-      - name: Ensure nothing has changed
-        run: git diff --exit-code -- . ':!go.sum' ':!go.mod'
-        working-directory: ${{ matrix.module }}
+    with:
+      module: common
+      run_check_generated_files: false
+      run_build_image: false
+      run_tests: true
 
-
-  make-test:
-    name: Run unit tests ${{ matrix.module }}
-    if: ${{ fromJson(needs.prepare.outputs.modules) }} != '[]'
-    runs-on: ubuntu-latest
+  common-server:
+    name: Common Server
+    uses: ./.github/workflows/reusable-go-ci.yaml
     needs: prepare
-    strategy:
-      fail-fast: false # run all tests even if one fails
-      matrix:
-        module: ${{ fromJson(needs.prepare.outputs.modules) }}
-    permissions:
-      pull-requests: write
-      checks: write
-      contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
-      - name: Setup Go
-        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # pin@5.5.0
-        with:
-          go-version-file: ${{ matrix.module }}/go.mod
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+    with:
+      module: common-server
+      run_check_generated_files: false
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/server/server.go"
 
-      - name: Set up gotestfmt
-        uses: gotesttools/gotestfmt-action@v2
+  identity:
+    name: Identity
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: identity
+      run_check_generated_files: true
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/main.go"
 
-      - name: Build and test module
-        run: make test
-        working-directory: ${{ matrix.module }}
-        env:
-          ENVTEST_K8S_VERSION: "1.31.0"
+  gateway:
+    name: Gateway
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: gateway
+      run_check_generated_files: true
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/main.go"
 
-      - name: Generate HTML coverage report
-        run: go tool cover -html=cover.out -o coverage.html
-        working-directory: ${{ matrix.module }}
-
-      - name: Generate Cobertura coverage report
-        run: |
-            go install github.com/boumenot/gocover-cobertura@latest
-            gocover-cobertura < cover.out > cobertura.xml
-        working-directory: ${{ matrix.module }}
-
-      - name: Upload go test log
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # pin@v4.6.2
-        if: always()
-        with:
-          name: ${{ matrix.module }}-gotest.log
-          path: ${{ matrix.module }}/gotest.log
-          if-no-files-found: error
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.module }}-test-report
-          path: |
-            ${{ matrix.module }}/cover.out
-            ${{ matrix.module }}/coverage.html
-            ${{ matrix.module }}/cobertura.xml
-            ${{ matrix.module }}/junit.xml
-
-      - name: Publish test report
-        uses: mikepenz/action-junit-report@v5
-        if: always() && github.event_name == 'pull_request'
-        with:
-          report_paths: '${{ matrix.module }}/junit.xml'
-          check_name: Test Report
-          comment: true
-          include_passed: true
-
-      - name: Prepare coverage comment
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        if: always() && github.event_name == 'pull_request'
-        with:
-          filename: ${{ matrix.module }}/cobertura.xml
-          badge: true
-          fail_below_min: false # TODO: set this to true when our overall coverage has improved
-          format: markdown
-          indicators: true
-          output: both
-          thresholds: '60 80'
-
-      - name: Append coverage comment
-        if: always() && github.event_name == 'pull_request'
-        run: |
-          sudo chown $(whoami) code-coverage-results.md
-          printf "\nDownload the latest HTML coverage report [here](${{ steps.upload-results.outputs.artifact-url }})." >> code-coverage-results.md
-
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: always() && github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
-          
-  build-push-operator-image: #TODO: Fix output for digest
-    name: Build operators
-    runs-on: ubuntu-latest
-    needs: [prepare, make-test]
-    outputs:
-      image-digest: ${{ steps.build-operators.outputs.digest }}
-      image-tag: ${{ steps.build-operators.outputs.tag }}
-    strategy:
-      fail-fast: false
-      matrix:
-        module: ${{ fromJson(needs.prepare.outputs.operators) }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: ${{ matrix.module }}/go.mod
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-
-      - uses: ko-build/setup-ko@v0.8
-      - name: Inject slug vars
-        uses: rlespinasse/github-slug-action@v5
-      - run: |
-          output=$(ko build cmd/main.go --bare --tags ${GITHUB_REF_SLUG})
-          echo "$output"
-          digest=$(echo "$output" | grep -o 'sha256:[a-f0-9]\{64\}')
-          echo "digest=$digest" >> $GITHUB_OUTPUT
-          tag=$(echo ${{ github.ref }} | cut -c11-) # get tag name without tags/refs/ prefix.
-          echo "tag=$tag" >> $GITHUB_OUTPUT
-        env:
-          KO_DOCKER_REPO: ghcr.io/${{ github.repository }}/${{ matrix.module }}
-        working-directory: ${{ matrix.module }}
-
-#  scan-operator-image: #TODO: Use digest instead of tag from build-push-operator-image
-#    name: Scan operator image
-#    runs-on: ubuntu-latest
-#    needs:
-#      - prepare
-#      - build-push-operator-image
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        module: ${{ fromJson(needs.prepare.outputs.operators) }}
-#    steps:
-#      - name: Run Trivy vulnerability scanner
-#        uses: aquasecurity/trivy-action@0.28.0
-#        env:
-#          TRIVY_USERNAME: ${{ secrets.GITHUB_ACTOR }}
-#          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          image-ref: 'ghcr.io/${{ github.repository }}/${{ matrix.module }}@${{ needs.build-push-operator-image.outputs.image-tag }}'
-#          exit-code: '1'
-#          vuln-type: 'os,library'
-#          severity: 'CRITICAL,HIGH'
-
-# TODO: build other modules
+  secret-manager:
+    name: Secret Manager
+    uses: ./.github/workflows/reusable-go-ci.yaml
+    needs: prepare
+    with:
+      module: secret-manager
+      run_check_generated_files: false
+      run_build_image: true
+      run_tests: true
+      ko_build_path: "cmd/server/server.go"
