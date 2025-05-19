@@ -107,7 +107,7 @@ The diagram below shows the general flow and interfaces between the most importa
 # ![Architecture](./docs//img/CP_Architecture_2.drawio.svg)
 
 ## Getting started
-A comprehensive guide on how to get started with the installation of the Open Telekom Integration Platform is available here: [Getting Started](./files/getting_started.md)  
+A comprehensive guide on how to get started with the installation of the Open Telekom Integration Platform is available here: [Getting Started](./docs/files/getting_started.md)  
 
 ## Code of Conduct
 
