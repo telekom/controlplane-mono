@@ -57,7 +57,7 @@ Provides team management capabilities within the control plane
 <summary><strong>Secret-Management</strong></summary>
 Secret management involves securely storing, accessing, and distributing sensitive information such as passwords, API keys, and certificates within a Kubernetes cluster. It ensures that secrets are encrypted at rest and transmitted securely, while limiting access to only authorized workloads and users.  
 </details>
-
+<br />
 <details>
 <summary><strong>REST APIs for Key Actions</strong></summary> 
 - Rover API: API to interact with and manage Rover functionalities.
