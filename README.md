@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+SPDX-FileCopyrightText: 2025 Deutsche Telekom AG
 
 SPDX-License-Identifier: CC0-1.0    
 -->
@@ -21,16 +21,16 @@ SPDX-License-Identifier: CC0-1.0
 
 ## About
 
-As Part of Open Telecom Integration Platform, the Control Plane is the central management layer that governs the operation of your Kubernetes cluster. It maintains the desired state of the system, manages workloads, and provides interfaces for user interaction and automation.
+As Part of Open TeleKom Integration Platform, the Control Plane is the central management layer that governs the operation of your Kubernetes cluster. It maintains the desired state of the system, manages workloads, and provides interfaces for user interaction and automation.
 
-The Rover Control Plane components run on one or more nodes in the cluster and coordinate all cluster activities, including scheduling, monitoring, and responding to events.  
+The Control Plane components run on one or more nodes in the cluster and coordinate all cluster activities, including scheduling, monitoring, and responding to events.  
 
 
 ## Features
 
 The Open Telekom Integration Platform Control Plane supports the whole API lifecycle and allows seamless, cloud-independent integration of services. Further, it enables a fine-grained and vigilant API access control. The communication is secure by design, utilizing OAuth 2.0 and an integrated permission management. 
 
-Key features of The Rover Control Plane include:  
+Key features of the Control Plane include:  
 
 
 <details>
@@ -60,11 +60,11 @@ Secret management involves securely storing, accessing, and distributing sensiti
 <br />
 <details>
 <summary><strong>REST APIs for Key Actions</strong></summary> 
-- Rover API: API to interact with and manage Rover functionalities.
-- Approval API: API for handling approval processes and workflows.
-- Team API: API for team management and related actions.
-- Catalog API: API to access and manage an API catalog
-- ControlPlane API
+* Rover API: API to interact with and manage Rover functionalities.
+* Approval API: API for handling approval processes and workflows.
+* Team API: API for team management and related actions.
+* Catalog API: API to access and manage an API catalog
+* ControlPlane API
 </details>
 
 ## Components
@@ -96,18 +96,21 @@ These operators work alongside the Kubernetes API server and etcd, watching for 
 
 ### Infrastructure
 
-Rover Control Plane requires the following infrastructure components in order to operate correctly:
+The Control Plane requires the following infrastructure components in order to operate correctly:
 
 - **Kubernetes**: The Open Telekom Integration Platform Control Plane is designed to be deployed on Kubernetes. Currently, it is tested with Kubernetes version 1.31.
+- **cert-manager**: [cert-manager](https://cert-manager.io/docs/) creates TLS certificates for workloads in your Kubernetes cluster and renews the certificates before they expire.
+- **trust-manager**: [trust-manager](https://cert-manager.io/docs/trust/trust-manager/) is the easiest way to manage trust bundles in Kubernetes clusters.
+**Prometheus CRDs**: By default, Prometheus based monitoring is enabled and hence needs the CRDs to be installed in the Control Plane
 - **API Management component**
 - **Identity Management component**
 
 ## Architecture
 The diagram below shows the general flow and interfaces between the most important components of The Rover Control Plane.
-# ![Architecture](./docs//img/CP_Architecture_2.drawio.svg)
+# ![Architecture](./docs//img/CP_Architecture.drawio.svg)
 
 ## Getting started
-A comprehensive guide on how to get started with the installation of the Open Telekom Integration Platform is available here: [Getting Started](./docs/files/getting_started.md)  
+A comprehensive guide on how to get started with the installation of the Open Telekom Integration Platform is available here: [Getting Started](./docs/files/getting_started.md)
 
 ## Code of Conduct
 
@@ -117,5 +120,6 @@ By participating in this project, you agree to abide by its [Code of Conduct](./
 
 ## Licensing
 
-This project follows the [REUSE standard for software licensing](https://reuse.software/). You can find a guide for developers at https://telekom.github.io/reuse-template/.   
-Each file contains copyright and license information, and license texts can be found in the [./LICENSES](./LICENSES) folder. For more information visit https://reuse.software/.
+This project follows the [REUSE standard for software licensing](https://reuse.software/).    
+Each file contains copyright and license information, and license texts can be found in the [./LICENSES](./LICENSES) folder. For more information visit https://reuse.software/.    
+You can find a guide for developers at https://telekom.github.io/reuse-template/.   
