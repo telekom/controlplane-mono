@@ -31,5 +31,8 @@ func main() {
 
 		fmt.Print(string(out))
 		fmt.Println(strings.Repeat("-", 80))
+
+		log.Print("I'm done with my job.")
+
 	}
 }
