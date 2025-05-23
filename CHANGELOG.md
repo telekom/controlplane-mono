@@ -1,3 +1,10 @@
+## [0.5.4](https://github.com/telekom/controlplane-mono/compare/v0.5.3...v0.5.4) (2025-05-23)
+
+
+### Bug Fixes
+
+* **semantic-release:** moved update_install to prepare ([366b58b](https://github.com/telekom/controlplane-mono/commit/366b58b5b3df9fe71f8267c11a484add4adf97b0))
+
 ## [0.5.3](https://github.com/telekom/controlplane-mono/compare/v0.5.2...v0.5.3) (2025-05-23)
 
 
