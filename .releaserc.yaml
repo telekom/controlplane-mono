@@ -9,8 +9,16 @@ plugins:
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/changelog"
-  - "@semantic-release/git"
+  - - "@semantic-release/git"
+    - assets:
+        - "CHANGELOG.md"
+        - "deploy/kustomization.yaml"
+
   - - "@semantic-release/exec"
     - publishCmd: |
         echo "${nextRelease.notes}" > /tmp/release-notes.md
-        goreleaser release --release-notes /tmp/release-notes.md --clean
+
+        KUSTOMIZATION_FILE="deploy/kustomization.yaml"
+        VERSION="${nextRelease.version}"
+        sed -i -E "s/(ref=)v[0-9]+\.[0-9]+\.[0-9]+/\1${VERSION}/g" "$KUSTOMIZATION_FILE"
+        sed -i -E "s/(newTag:)[[:space:]]*v[0-9]+\.[0-9]+\.[0-9]+/\1 ${VERSION}/g" "$KUSTOMIZATION_FILE"

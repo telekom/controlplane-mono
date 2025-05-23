@@ -1,3 +1,7 @@
+# Copyright 2025 Deutsche Telekom IT GmbH
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: Release
 on:
   workflow_dispatch:
@@ -28,12 +32,14 @@ jobs:
             ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
       - uses: sigstore/cosign-installer@v3.8.2
-      - uses: anchore/sbom-action/download-syft@v0.19.0
+      - uses: anchore/sbom-action/download-syft@v0.20.0
       - name: Install GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           install-only: true
-      - uses: cycjimmy/semantic-release-action@v4
+      - name: Run Semantic Release
+        id: semantic_release
+        uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
             @semantic-release/changelog
@@ -41,4 +47,10 @@ jobs:
             @semantic-release/git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GORELEASER_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Run GoReleaser
+        if: steps.semantic_release.outputs.new_release_published == 'true'
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          args: release --release-notes /tmp/release-notes.md --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
