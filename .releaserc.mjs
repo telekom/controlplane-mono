@@ -22,10 +22,8 @@ export default {
             ],
         }],
         ['@semantic-release/exec', {
-            publishCmd: `
-echo "\${nextRelease.notes}" > /tmp/release-notes.md
-bash ./update_install.sh "\${nextRelease.gitTag}"
-`,
+            prepareCmd: `bash ./update_install.sh "\${nextRelease.gitTag}"`,
+            publishCmd: `echo "\${nextRelease.notes}" > /tmp/release-notes.md`,
         }],
     ],
 };
