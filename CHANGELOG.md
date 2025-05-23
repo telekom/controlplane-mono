@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/telekom/controlplane-mono/compare/v0.5.0...v0.5.1) (2025-05-23)
+
+
+### Bug Fixes
+
+* **installing:** correct version in semantic-release ([3796ff6](https://github.com/telekom/controlplane-mono/commit/3796ff6582c4ce4a61e8811f58a743ea0dbb222c))
+
 # [0.5.0](https://github.com/telekom/controlplane-mono/compare/v0.4.0...v0.5.0) (2025-05-23)
 
 
