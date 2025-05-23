@@ -1,3 +1,11 @@
+# [0.5.0](https://github.com/telekom/controlplane-mono/compare/v0.4.0...v0.5.0) (2025-05-23)
+
+
+### Features
+
+* **common:** add completion log message in install_crds.go ([41b9868](https://github.com/telekom/controlplane-mono/commit/41b98680b8b503b174be3ad907841d44b0a7fdff))
+* **installing:** testing release logic for installation ([bd21eb7](https://github.com/telekom/controlplane-mono/commit/bd21eb784d8f6527522eabe6c859b472d362d880))
+
 # [0.4.0](https://github.com/telekom/controlplane-mono/compare/v0.3.4...v0.4.0) (2025-05-15)
 
 
