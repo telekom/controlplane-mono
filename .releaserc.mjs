@@ -24,10 +24,7 @@ export default {
         ['@semantic-release/exec', {
             publishCmd: `
 echo "\${nextRelease.notes}" > /tmp/release-notes.md
-
-KUSTOMIZATION_FILE="deploy/kustomization.yaml"
-sed -i -E "s/(ref=)v[0-9]+\.[0-9]+\.[0-9]+(?:-[a-zA-Z0-9.-]+)?(?:\+[a-zA-Z0-9.-]+)?/\\1\${nextRelease.gitTag}/g" "$KUSTOMIZATION_FILE"
-sed -i -E "s/(newTag:)[[:space:]]*v[0-9]+\.[0-9]+\.[0-9]+(?:-[a-zA-Z0-9.-]+)?(?:\+[a-zA-Z0-9.-]+)?/\\1 \${nextRelease.gitTag}/g" "$KUSTOMIZATION_FILE"
+bash ./update_install.sh "\${nextRelease.gitTag}"
 `,
         }],
     ],
