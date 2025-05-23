@@ -1,3 +1,10 @@
+## [0.5.5](https://github.com/telekom/controlplane-mono/compare/v0.5.4...v0.5.5) (2025-05-23)
+
+
+### Bug Fixes
+
+* **semantic-release:** changed order of plugins ([9ca5dbd](https://github.com/telekom/controlplane-mono/commit/9ca5dbd3b0a339b64e19b19071feb3407c50890d))
+
 ## [0.5.4](https://github.com/telekom/controlplane-mono/compare/v0.5.3...v0.5.4) (2025-05-23)
 
 
