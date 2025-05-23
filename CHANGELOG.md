@@ -1,3 +1,10 @@
+## [0.5.3](https://github.com/telekom/controlplane-mono/compare/v0.5.2...v0.5.3) (2025-05-23)
+
+
+### Bug Fixes
+
+* **semantic-release:** moved bash script to file ([e265a04](https://github.com/telekom/controlplane-mono/commit/e265a04c4e867714a9db3b001f84663afa59e46d))
+
 ## [0.5.2](https://github.com/telekom/controlplane-mono/compare/v0.5.1...v0.5.2) (2025-05-23)
 
 
