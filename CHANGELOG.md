@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/telekom/controlplane-mono/compare/v0.5.1...v0.5.2) (2025-05-23)
+
+
+### Bug Fixes
+
+* **semantic-release:** changed configfile format to js ([6b53a3c](https://github.com/telekom/controlplane-mono/commit/6b53a3cb0b7bb568bb2f576e4b8af4ca4f33b2b7))
+
 ## [0.5.1](https://github.com/telekom/controlplane-mono/compare/v0.5.0...v0.5.1) (2025-05-23)
 
 
